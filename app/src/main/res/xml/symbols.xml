@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<keyboard xmlns="http://schemas.android.com/apk/res/android" android:keywidth="33%p"
+android:horizontalgap="0px" android:verticalgap="0px" android:keyheight="10%p"
+android:layout_height="wrap_content" android:layout_width="wrap_content"
+xmlns:android="http://www.w3.org/2001/XMLSchema"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://schemas.android.com/apk/res/android ">
+<row>
+    <key android:codes="1" android:keylabel="1">
+        <key android:codes="2" android:keylabel="2">
+            <key android:codes="3" android:keylabel="3"></key>
+        </key>
+    </key>
+</row>
+<row>
+    <key android:codes="4" android:keylabel="4">
+        <key android:codes="5" android:keylabel="5">
+            <key android:codes="6" android:keylabel="6"></key>
+        </key>
+    </key>
+</row>
+<row>
+    <key android:codes="7" android:keylabel="7">
+        <key android:codes="8" android:keylabel="8">
+            <key android:codes="9" android:keylabel="9"></key>
+        </key>
+    </key>
+</row>
+<row>
+    <key android:codes="10" android:keylabel="回退">
+        <key android:codes="0" android:keylabel="0">
+            <key android:codes="ok" android:keylabel="确定"></key>
+        </key>
+    </key>
+</row>
+
+</keyboard>

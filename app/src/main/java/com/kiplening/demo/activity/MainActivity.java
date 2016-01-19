@@ -1,0 +1,110 @@
+package com.kiplening.demo.activity;
+
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ListView;
+
+import com.kiplening.demo.R;
+import com.kiplening.demo.service.LockService;
+import com.kiplening.demo.tools.ListViewAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class MainActivity extends AppCompatActivity {
+
+    private static MainActivity instance;
+    private List<Map<String, Object>> listItems;
+    private ListView myList;
+    private ListViewAdapter listViewAdapter;
+    private ArrayList<String> lockList = new ArrayList<String>();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        instance = this;
+        listItems = new ArrayList<Map<String,Object>>();
+        //Intent intent = getIntent();
+        ArrayList<String> appList = new ArrayList<String>();
+        List<PackageInfo> packages = getPackageManager()
+                .getInstalledPackages(0);
+        for (int i = 0; i < packages.size(); i++) {
+            // for (ResolveInfo resolveInfo : allMatches) {
+            PackageInfo packageInfo = packages.get(i);
+
+
+            if (isUserApp(packageInfo)) {
+                appList.add(packageInfo.packageName);
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("info", "installed app");
+                map.put("name",
+                        packageInfo.applicationInfo.loadLabel(
+                                getPackageManager()).toString());
+                map.put("packageName", packageInfo.applicationInfo.packageName);
+                map.put("icon", packageInfo.applicationInfo
+                        .loadIcon(getPackageManager()));
+                map.put("flag", "锁定");
+                lockList.add(packageInfo.applicationInfo.packageName);
+                listItems.add(map);
+                Log.i("test", packageInfo.applicationInfo.loadLabel(
+                        getPackageManager()).toString());
+            }
+        }
+        myList = (ListView)findViewById(R.id.list);
+        listViewAdapter = new ListViewAdapter(this,listItems);
+        myList.setAdapter(listViewAdapter);
+
+        Intent intent = new Intent(MainActivity.this, LockService.class);
+
+        intent.putStringArrayListExtra("lockList", lockList);
+        startService(intent);
+        Intent intent1 = new Intent(MainActivity.this,UnLockActivity.class);
+
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //startActivity(intent1);
+    }
+
+    public boolean isSystemApp(PackageInfo pInfo) {
+        return ((pInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
+    }
+
+    public boolean isSystemUpdateApp(PackageInfo pInfo) {
+        return ((pInfo.applicationInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0);
+    }
+
+    public boolean isUserApp(PackageInfo pInfo) {
+        return (!isSystemApp(pInfo) && !isSystemUpdateApp(pInfo));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+}
