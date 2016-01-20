@@ -1,7 +1,9 @@
 package com.kiplening.demo.tools;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kiplening.demo.R;
+import com.kiplening.demo.module.App;
 
 import java.util.List;
 import java.util.Map;
@@ -26,9 +29,17 @@ public class ListViewAdapter extends BaseAdapter{
     private boolean[] hasChecked;
     ListItemView listItemView = null;
 
+    private SQLiteDatabase db;
+    private String dataBaseName = "kiplening";
+    private String tableName = "app";
+    private final DataBaseHelper helper;
+    private DataBaseUtil dataBaseUtil = new DataBaseUtil();
+
     public ListViewAdapter(Context context,List<Map<String,Object>> listItems) {
         this.context = context;
 
+        helper = new DataBaseHelper(context,dataBaseName,null,1,null);
+        db = helper.getWritableDatabase();
         //创建视图容器
         listContainer = LayoutInflater.from(context);
         this.listItems = listItems;
@@ -77,12 +88,26 @@ public class ListViewAdapter extends BaseAdapter{
             @Override
             public void onClick(View v) {
                 //TODO:锁上该应用
+                App app = new App((String) listItems.get(position).get("packageName"),(String) listItems.get(position).get("name"));
                 if (listItems.get(position).get("flag").equals("已锁定")) {
                     listItems.get(position).put("flag", "锁定");
+
+                    if(dataBaseUtil.delete(db,app) == 0){
+                        Log.i(tableName, "delete failed! ");
+                    }
+                    else {
+                        Log.i(tableName, "delete success! ");
+                    }
                     System.out.println("delete");
                 }
                 else {
                     listItems.get(position).put("flag", "已锁定");
+                    if(dataBaseUtil.insert(db,app) == -1){
+                        Log.i(tableName, "insert failed! ");
+                    }
+                    else {
+                        Log.i(tableName, "insert success! ");
+                    }
                     System.out.println("lock");
                 }
                 //thread.start();
