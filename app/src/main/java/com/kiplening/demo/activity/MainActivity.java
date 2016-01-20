@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
                         .loadIcon(getPackageManager()));
                 if (isLocked(packageInfo,lockedApps)){
                     map.put("flag", "已锁定");
+                    lockList.add(packageInfo.applicationInfo.packageName);
                 }else {
                     map.put("flag", "锁定");
                 }
@@ -87,9 +88,9 @@ public class MainActivity extends AppCompatActivity {
         myList.setAdapter(listViewAdapter);
 
         Intent intent = new Intent(MainActivity.this, LockService.class);
-
         intent.putStringArrayListExtra("lockList", lockList);
         startService(intent);
+
 
     }
 
@@ -113,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean isLocked(PackageInfo pInfo,ArrayList<App> lockedApps){
         for (App a:lockedApps) {
             if (pInfo.applicationInfo.packageName.equals(a.getPackageName())){
+
                 return true;
             }
         }
