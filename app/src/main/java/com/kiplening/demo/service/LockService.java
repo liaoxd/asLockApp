@@ -47,6 +47,10 @@ public class LockService extends Service{
         handlerThread = new HandlerThread("count_thread");
         handlerThread.start();
         lockName = intent.getStringArrayListExtra("lockList");
+        for (String l:lockName) {
+            System.out.print("锁定");
+            System.out.println(l);
+        }
 
         //开始循环检查
         mHandler = new Handler(handlerThread.getLooper()) {
@@ -62,16 +66,21 @@ public class LockService extends Service{
                          * 可以自行的实验一下
                          * 所以这里用isUnLockActivity变量来做判断的
                          */
-                        if(isLockName() && !isUnLockActivity){
+                        try {
+                            if(isLockName() && !isUnLockActivity){
 
-                            Log.i(TAG, "locking...");
-                            //调用了解锁界面之后，需要设置一下isUnLockActivity的值
+                                Log.i(TAG, "locking...");
+                                //调用了解锁界面之后，需要设置一下isUnLockActivity的值
 
-                            Intent intent = new Intent(LockService.this,UnLockActivity.class);
+                                Intent intent = new Intent(LockService.this,UnLockActivity.class);
 
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            isUnLockActivity = true;
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+
+                                isUnLockActivity = true;
+                            }
+                        } catch (PackageManager.NameNotFoundException e) {
+                            e.printStackTrace();
                         }
                         break;
                 }
@@ -82,12 +91,35 @@ public class LockService extends Service{
         return Service.START_STICKY;
     }
 
-    private boolean isLockName() {
+    private boolean isLockName() throws PackageManager.NameNotFoundException {
         // TODO Auto-generated method stub
         List<PackageInfo> packages = getPackageManager()
                 .getInstalledPackages(0);
         ActivityManager mActivityManager;
         mActivityManager = (ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE);
+
+        String packageName = null,lable;
+        if (Build.VERSION.SDK_INT > 21) {
+            // 5.0及其以后的版本
+            List<ActivityManager.AppTask> tasks = mActivityManager.getAppTasks();
+            if (null != tasks && tasks.size() > 0) {
+                //System.out.print("hahahahahahaha");
+                for (ActivityManager.AppTask task:tasks){
+                    packageName = task.getTaskInfo().baseIntent.getComponent().getPackageName();
+                    lable = getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(packageName, PackageManager.GET_META_DATA)).toString();
+                    //Log.i(TAG,packageName + lable);
+                }
+            }
+        } else{
+            // 5.0之前
+            // 获取正在运行的任务栈(一个应用程序占用一个任务栈) 最近使用的任务栈会在最前面
+            // 1表示给集合设置的最大容量 List<RunningTaskInfo> infos = am.getRunningTasks(1);
+            // 获取最近运行的任务栈中的栈顶Activity(即用户当前操作的activity)的包名
+            packageName = mActivityManager.getRunningTasks(1).get(0).topActivity.getPackageName();
+            //Log.i(TAG,packageName);
+        }
+
+
 
         /*
         ComponentName topActivity = mActivityManager.getRunningTasks(1).get(0).topActivity;
@@ -98,12 +130,14 @@ public class LockService extends Service{
                 pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 
 
-        String packageName = ""; /* Android5.0之后获取程序锁的方式是不一样的*/
-
-        if (Build.VERSION.SDK_INT > 20) {
+        //String packageName = ""; /* Android5.0之后获取程序锁的方式是不一样的*/
+/*据说能成功的方法,在魅族上面测试不通过
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
         // 5.0及其以后的版本
+            System.out.println("hahahahahahaha");
             List<ActivityManager.RunningAppProcessInfo> tasks = mActivityManager.getRunningAppProcesses();
             if (null != tasks && tasks.size() > 0) {
+                System.out.print("hahahahahahaha");
                 packageName = tasks.get(0).processName;
             }
         } else{
@@ -113,6 +147,8 @@ public class LockService extends Service{
             // 获取最近运行的任务栈中的栈顶Activity(即用户当前操作的activity)的包名
             packageName = mActivityManager.getRunningTasks(1).get(0).topActivity.getPackageName();
         }
+ */
+
 
         boolean isScreenOn = pm.isScreenOn();//如果为true，则表示屏幕“亮”了，否则屏幕“暗”了。
         //如果当前的Activity是桌面app,那么就需要将isUnLockActivity清空值
@@ -120,7 +156,7 @@ public class LockService extends Service{
             isUnLockActivity = false;
         }
 
-//        Log.v("LockService", "packageName == " + packageName);
+        Log.v("LockService", "packageName == " + packageName);
 
         for (int i = 0; i < lockName.size(); i++) {
             if(lockName.get(i).equals(packageName)){

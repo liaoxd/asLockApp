@@ -2,7 +2,6 @@ package com.kiplening.demo.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -23,9 +22,6 @@ import java.lang.reflect.Method;
  */
 public class UnLockActivity extends AppCompatActivity{
     private EditText edit;
-    private String packageName;
-    private String passWord = "123456";
-    private SharedPreferences preferences;
     private Context ctx;
     private Activity act;
 
@@ -33,7 +29,6 @@ public class UnLockActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_unlock);
         ctx = this;
         act = this;
@@ -90,30 +85,7 @@ public class UnLockActivity extends AppCompatActivity{
             }
         });
     }
-/*
-    @Override
-    public void onClick(View v) {
-        // TODO Auto-generated method stub
-        new KeyboardUtil(this, this, inputPwd).showKeyboard();
-        String input = inputPwd.getText().toString().trim();
-        preferences = getSharedPreferences("passWord", MODE_PRIVATE);
-        passWord = preferences.getString("pwd", "");
-        if(TextUtils.isEmpty(input))
-        {
-            Toast.makeText(this, "密码不能为空", Toast.LENGTH_SHORT).show();
-        }
-        else if(passWord.equals(input))
-        {
-            //WatchAppService.lastRunningApp = WatchAppService.runningApp;//这里赋值，终于解决了反复弹出验证页面的BUG
-            finish();
-        }
-        else
-        {
-            Toast.makeText(this, "密码错误", Toast.LENGTH_SHORT).show();
-            inputPwd.setText("");//置空
-        }
-    }
- */
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub
@@ -122,18 +94,8 @@ public class UnLockActivity extends AppCompatActivity{
         {
             return true;//阻止事件继续向下分发
         }
+
         return super.onKeyDown(keyCode, event);
     }
-    /*
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        // TODO Auto-generated method stub
-        //这样是在触摸到控件时，软键盘才会显示出来
-        int inputback = inputPwd.getInputType();
-        inputPwd.setInputType(InputType.TYPE_NULL);
-        new KeyboardUtil(this, this, inputPwd).showKeyboard();
-        inputPwd.setInputType(inputback);
-        return false;
-    }
-    */
+
 }

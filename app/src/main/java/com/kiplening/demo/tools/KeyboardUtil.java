@@ -7,6 +7,7 @@ import android.inputmethodservice.KeyboardView;
 import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.kiplening.demo.R;
 
@@ -20,6 +21,8 @@ public class KeyboardUtil {
     private KeyboardView keyboardView;
     private Keyboard k;
     private EditText ed;
+
+    private String password = "123456";
 
     public KeyboardUtil(Activity act, Context ctx, EditText editText) {
         this.act = act;
@@ -56,6 +59,14 @@ public class KeyboardUtil {
             Editable editable = ed.getText();
             int start = ed.getSelectionStart();
             if (primaryCode == -5) {// 完成
+                if (ed.getText().toString().equals(password)){
+                    act.finish();
+                }
+                else {
+                    start = 0;
+                    Toast.makeText(act,"密码错误，请重输",Toast.LENGTH_SHORT).show();
+                }
+
                 hideKeyboard();
             } else if (primaryCode == -2) {// 回退
                 if (editable != null && editable.length() > 0) {
