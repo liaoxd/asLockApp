@@ -27,4 +27,5 @@
 ### 参考资料
 关于应用锁的实现可以参考我的博客：
 [安卓开发之应用锁](http://blog.csdn.net/include_u/article/details/49889791)
+
 [应用锁之获取栈顶Activity](http://blog.csdn.net/include_u/article/details/50558130)
