@@ -1,5 +1,6 @@
 package com.kiplening.demo.activity;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -9,11 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.kiplening.demo.R;
 import com.kiplening.demo.module.App;
-import com.kiplening.demo.service.LockService;
+import com.kiplening.demo.service.Receiver;
 import com.kiplening.demo.tools.DataBaseHelper;
 import com.kiplening.demo.tools.DataBaseUtil;
 import com.kiplening.demo.tools.ListViewAdapter;
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     public final DataBaseHelper helper = new DataBaseHelper(this,dataBaseName,null,1,null);
     private DataBaseUtil dataBaseUtil = new DataBaseUtil();
 
+    private String status;
+    private Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +54,12 @@ public class MainActivity extends AppCompatActivity {
 
         db = helper.getWritableDatabase();
         lockedApps = dataBaseUtil.getAll(db);
-
+        status = dataBaseUtil.getStatus(db);
+        if (status.equals("error")){
+            ContentValues cv = new ContentValues();
+            cv.put("status", "true");
+            db.insert("settings", null, cv);
+        }
         listItems = new ArrayList<Map<String,Object>>();
         //Intent intent = getIntent();
         ArrayList<String> appList = new ArrayList<String>();
@@ -86,10 +96,20 @@ public class MainActivity extends AppCompatActivity {
         myList = (ListView)findViewById(R.id.list);
         listViewAdapter = new ListViewAdapter(this,listItems);
         myList.setAdapter(listViewAdapter);
+        Receiver r = new Receiver();
 
-        Intent intent = new Intent(MainActivity.this, LockService.class);
-        intent.putStringArrayListExtra("lockList", lockList);
-        startService(intent);
+        if (status.equals("true")){
+            Intent intent = new Intent("android.intent.action.MAIN_BROADCAST");
+            intent.putStringArrayListExtra("lockList", lockList);
+            intent.putExtra("status", "true");
+            sendBroadcast(intent);
+        }else{
+            Intent intent = new Intent("android.intent.action.MAIN_BROADCAST");
+            intent.putStringArrayListExtra("lockList", lockList);
+            intent.putExtra("status","false");
+            sendBroadcast(intent);
+        }
+
 
 
     }
@@ -125,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -137,6 +157,10 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent i = new Intent(MainActivity.this,SettingActivity.class);
+            status = dataBaseUtil.getStatus(db);
+            i.putExtra("status",status);
+            startActivity(i);
             return true;
         }
 

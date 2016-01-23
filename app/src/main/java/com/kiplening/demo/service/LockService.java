@@ -32,6 +32,7 @@ public class LockService extends Service{
 
     private ArrayList<String> lockName = new ArrayList<String>();
     private boolean isUnLockActivity = false;
+    private String status;
 
     //设定检测时间的间隔，间隔太长可能造成已进入软件还未加锁的情况，
     //间隔时间太短则会加大CPU的负荷，程序更耗电。内存占用更大
@@ -47,48 +48,58 @@ public class LockService extends Service{
         handlerThread = new HandlerThread("count_thread");
         handlerThread.start();
         lockName = intent.getStringArrayListExtra("lockList");
+        status = intent.getStringExtra("status");
         for (String l:lockName) {
             System.out.print("锁定");
             System.out.println(l);
         }
 
-        //开始循环检查
-        mHandler = new Handler(handlerThread.getLooper()) {
-            public void dispatchMessage(android.os.Message msg) {
-                switch (msg.what) {
-                    case LOOPHANDLER:
-                        //Log.i(TAG,"do something..."+(System.currentTimeMillis()/1000));
-                        /**
-                         * 这里需要注意的是：isLockName是用来判断当前的topActivity是不是我们需要加锁的应用
-                         * 同时还是需要做一个判断，就是是否已经对这个app加过锁了，不然会出现一个问题
-                         * 当我们打开app时，启动我们的加锁界面，解锁之后，回到了app,但是这时候又发现栈顶app是
-                         * 需要加锁的app,那么这时候又启动了我们加锁界面，这样就出现死循环了。
-                         * 可以自行的实验一下
-                         * 所以这里用isUnLockActivity变量来做判断的
-                         */
-                        try {
-                            if(isLockName() && !isUnLockActivity){
+        if (status.equals("false")){
+            return Service.START_STICKY;
+        }else{
+            //开始循环检查
+            mHandler = new Handler(handlerThread.getLooper()) {
+                public void dispatchMessage(android.os.Message msg) {
+                    switch (msg.what) {
+                        case LOOPHANDLER:
+                            //Log.i(TAG,"do something..."+(System.currentTimeMillis()/1000));
+                            /**
+                             * 这里需要注意的是：isLockName是用来判断当前的topActivity是不是我们需要加锁的应用
+                             * 同时还是需要做一个判断，就是是否已经对这个app加过锁了，不然会出现一个问题
+                             * 当我们打开app时，启动我们的加锁界面，解锁之后，回到了app,但是这时候又发现栈顶app是
+                             * 需要加锁的app,那么这时候又启动了我们加锁界面，这样就出现死循环了。
+                             * 可以自行的实验一下
+                             * 所以这里用isUnLockActivity变量来做判断的
+                            */
+                            try {
+                                if(isLockName() && !isUnLockActivity){
+                                    if (status.equals("true")){
+                                        Log.i(TAG, "locking...");
+                                        //调用了解锁界面之后，需要设置一下isUnLockActivity的值
 
-                                Log.i(TAG, "locking...");
-                                //调用了解锁界面之后，需要设置一下isUnLockActivity的值
+                                        Intent intent = new Intent(LockService.this,UnLockActivity.class);
 
-                                Intent intent = new Intent(LockService.this,UnLockActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
 
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
+                                        isUnLockActivity = true;
+                                    }
 
-                                isUnLockActivity = true;
+                                }
+                            } catch (PackageManager.NameNotFoundException e) {
+                                e.printStackTrace();
                             }
-                        } catch (PackageManager.NameNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        break;
+                            break;
+                    }
+                    mHandler.sendEmptyMessageDelayed(LOOPHANDLER, cycleTime);
                 }
-                mHandler.sendEmptyMessageDelayed(LOOPHANDLER, cycleTime);
-            }
-        };
-        mHandler.sendEmptyMessage(LOOPHANDLER);
-        return Service.START_STICKY;
+            };
+            mHandler.sendEmptyMessage(LOOPHANDLER);
+            //return Service.START_STICKY;
+
+            return Service.START_STICKY;
+        }
+
     }
 
     private boolean isLockName() throws PackageManager.NameNotFoundException {
@@ -156,11 +167,14 @@ public class LockService extends Service{
             isUnLockActivity = false;
         }
 
-        Log.v("LockService", "packageName == " + packageName);
-
+        //Log.v("LockService", "packageName == " + packageName);
+        System.out.println(lockName.size());
+        System.out.println(status);
+        System.out.println(status.equals("false"));
         for (int i = 0; i < lockName.size(); i++) {
+            System.out.println(lockName.get(i));
             if(lockName.get(i).equals(packageName)){
-                Log.v("LockService", "packageName == " + packageName);
+                Log.v("LockService", "Locking ...." + packageName);
                 return true;
             }
         }

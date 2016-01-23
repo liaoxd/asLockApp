@@ -4,5 +4,14 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
     </style>
+    <style name="MyCheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/check</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+    <style name="MySettingText">
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_weight">6</item>
+    </style>
 
 </resources>
