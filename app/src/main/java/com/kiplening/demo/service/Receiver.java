@@ -16,7 +16,7 @@ public class Receiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (mainContext == null){
-            lockList = intent.getStringArrayListExtra("lockList");
+            lockList = (ArrayList<String>) intent.getStringArrayListExtra("lockList").clone();
             this.mainContext = context;
         }
         if (intent.getAction().equals("android.intent.action.SET_BROADCAST")){

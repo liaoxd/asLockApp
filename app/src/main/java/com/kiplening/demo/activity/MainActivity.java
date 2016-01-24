@@ -1,13 +1,18 @@
 package com.kiplening.demo.activity;
 
+import android.app.AlertDialog;
+import android.app.usage.UsageStatsManager;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -31,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Map<String, Object>> listItems;
     private ListView myList;
     private ListViewAdapter listViewAdapter;
-    private ArrayList<String> lockList = new ArrayList<String>();
+    static private ArrayList<String> lockList = new ArrayList<String>();
 
     private ArrayList<App> lockedApps;
 
@@ -51,7 +56,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         instance = this;
-
+        int currentVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentVersion > 20){
+            //if (isNoSwitch()){
+                new AlertDialog.Builder(this).
+                        setTitle("设置").
+                        setMessage("开启usagestats权限")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                                startActivity(intent);
+                            }
+                        }).show();
+            //}
+        }
         db = helper.getWritableDatabase();
         lockedApps = dataBaseUtil.getAll(db);
         status = dataBaseUtil.getStatus(db);
@@ -165,5 +184,28 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KeyEvent.KEYCODE_BACK == event.getKeyCode()){
+            finish();
+        }
+        if (KeyEvent.KEYCODE_HOME == event.getKeyCode()){
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private boolean isNoSwitch() {
+        long ts = System.currentTimeMillis();
+        UsageStatsManager usageStatsManager = (UsageStatsManager) getApplicationContext()
+                .getSystemService("usagestats");
+        List queryUsageStats = usageStatsManager.queryUsageStats(
+                UsageStatsManager.INTERVAL_BEST, 0, ts);
+        if (queryUsageStats == null || queryUsageStats.isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }

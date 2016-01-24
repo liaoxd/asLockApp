@@ -2,6 +2,8 @@ package com.kiplening.demo.service;
 
 import android.app.ActivityManager;
 import android.app.Service;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -110,17 +112,21 @@ public class LockService extends Service{
         mActivityManager = (ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE);
 
         String packageName = null,lable;
-        if (Build.VERSION.SDK_INT > 21) {
-            // 5.0及其以后的版本
-            List<ActivityManager.AppTask> tasks = mActivityManager.getAppTasks();
-            if (null != tasks && tasks.size() > 0) {
-                //System.out.print("hahahahahahaha");
-                for (ActivityManager.AppTask task:tasks){
-                    packageName = task.getTaskInfo().baseIntent.getComponent().getPackageName();
-                    lable = getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(packageName, PackageManager.GET_META_DATA)).toString();
-                    //Log.i(TAG,packageName + lable);
+        if (Build.VERSION.SDK_INT > 20) {
+            UsageStatsManager usageStatsManager = (UsageStatsManager) getApplicationContext()
+                    .getSystemService("usagestats");
+
+
+            long ts = System.currentTimeMillis();
+            List<UsageStats> queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST,0, ts);
+
+            UsageStats recentStats = null;
+            for (UsageStats usageStats : queryUsageStats) {
+                if (recentStats == null || recentStats.getLastTimeUsed() < usageStats.getLastTimeUsed()) {
+                    recentStats = usageStats;
                 }
             }
+            packageName = recentStats.getPackageName();
         } else{
             // 5.0之前
             // 获取正在运行的任务栈(一个应用程序占用一个任务栈) 最近使用的任务栈会在最前面

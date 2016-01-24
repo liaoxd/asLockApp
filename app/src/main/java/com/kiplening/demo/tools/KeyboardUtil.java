@@ -60,7 +60,8 @@ public class KeyboardUtil {
             int start = ed.getSelectionStart();
             if (primaryCode == -5) {// 完成
                 if (ed.getText().toString().equals(password)){
-                    act.finish();
+                    //act.finish();
+                    act.finishAndRemoveTask();
                 }
                 else {
                     start = 0;
