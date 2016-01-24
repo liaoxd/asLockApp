@@ -10,15 +10,14 @@ import java.util.ArrayList;
  * Created by MOON on 1/23/2016.
  */
 public class Receiver extends BroadcastReceiver {
-    static private ArrayList<String> lockList = new ArrayList<String>();
     static private Context mainContext ;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if (mainContext == null){
-            lockList = (ArrayList<String>) intent.getStringArrayListExtra("lockList").clone();
             this.mainContext = context;
         }
+        ArrayList<String> lockList = intent.getStringArrayListExtra("lockList");
         if (intent.getAction().equals("android.intent.action.SET_BROADCAST")){
             System.out.println("checkbox broadcast is working.");
             if(intent.getStringExtra("status").equals("true")){

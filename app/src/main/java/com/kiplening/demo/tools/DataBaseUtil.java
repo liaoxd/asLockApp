@@ -34,6 +34,15 @@ public class DataBaseUtil {
         }
         return lockList;
     }
+    public ArrayList<String> getAllLocked(SQLiteDatabase db){
+        ArrayList<App> allApp = this.getAll(db);
+        ArrayList<String> result = new ArrayList<>();
+        for (App a:
+             allApp) {
+            result.add(a.getPackageName());
+        }
+        return result;
+    }
 
     public long insert(SQLiteDatabase db,App app){
         ContentValues cv = new ContentValues();
@@ -61,5 +70,14 @@ public class DataBaseUtil {
             return "true";
         }
 
+    }
+    public boolean isLocked(String packageName,ArrayList<App> lockedApps){
+        for (App a:lockedApps) {
+            if (packageName.equals(a.getPackageName())){
+
+                return true;
+            }
+        }
+        return false;
     }
 }

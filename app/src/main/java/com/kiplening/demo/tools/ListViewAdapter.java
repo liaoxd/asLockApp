@@ -1,6 +1,7 @@
 package com.kiplening.demo.tools;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.kiplening.demo.R;
 import com.kiplening.demo.module.App;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -112,6 +114,19 @@ public class ListViewAdapter extends BaseAdapter{
                 }
                 //thread.start();
                 notifyDataSetChanged();
+                String status = dataBaseUtil.getStatus(db);
+                ArrayList<String> lockList = dataBaseUtil.getAllLocked(db);
+                if (status.equals("true")){
+                    Intent intent = new Intent("android.intent.action.MAIN_BROADCAST");
+                    intent.putStringArrayListExtra("lockList", lockList);
+                    intent.putExtra("status", "true");
+                    context.sendBroadcast(intent);
+                }else{
+                    Intent intent = new Intent("android.intent.action.MAIN_BROADCAST");
+                    intent.putStringArrayListExtra("lockList", lockList);
+                    intent.putExtra("status","false");
+                    context.sendBroadcast(intent);
+                }
 
             }
         });

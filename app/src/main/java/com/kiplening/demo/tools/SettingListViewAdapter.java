@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.kiplening.demo.R;
 
+import java.util.ArrayList;
+
 /**
  * Created by MOON on 1/23/2016.
  */
@@ -28,6 +30,7 @@ public class SettingListViewAdapter extends BaseAdapter {
     private String dataBaseName = "kiplening";
     private String tableName = "settings";
     private final DataBaseHelper helper;
+    private ArrayList<String> lockList;
     private DataBaseUtil dataBaseUtil = new DataBaseUtil();
 
     public SettingListViewAdapter(Context context,String status) {
@@ -82,12 +85,14 @@ public class SettingListViewAdapter extends BaseAdapter {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+                lockList = dataBaseUtil.getAllLocked(db);
                 if (isChecked) {
                     db.execSQL("delete from settings");
                     ContentValues cv = new ContentValues();
                     cv.put("status", "true");
                     db.insert("settings",null,cv);
                     Intent intent = new Intent("android.intent.action.SET_BROADCAST");
+                    intent.putStringArrayListExtra("lockList", lockList);
                     intent.putExtra("status", "true");
                     context.sendBroadcast(intent);
                     System.out.println(dataBaseUtil.getStatus(db));
@@ -97,6 +102,7 @@ public class SettingListViewAdapter extends BaseAdapter {
                     cv.put("status", "false");
                     db.insert("settings", null, cv);
                     Intent intent = new Intent("android.intent.action.SET_BROADCAST");
+                    intent.putStringArrayListExtra("lockList", lockList);
                     intent.putExtra("status", "false");
                     context.sendBroadcast(intent);
                 }

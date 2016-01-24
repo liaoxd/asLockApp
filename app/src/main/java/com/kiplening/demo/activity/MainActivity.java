@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.kiplening.demo.R;
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private DataBaseUtil dataBaseUtil = new DataBaseUtil();
 
     private String status;
-    private Button button;
+    //private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         instance = this;
         int currentVersion = android.os.Build.VERSION.SDK_INT;
         if (currentVersion > 20){
-            //if (isNoSwitch()){
+            if (!isNoSwitch()){
                 new AlertDialog.Builder(this).
                         setTitle("设置").
                         setMessage("开启usagestats权限")
@@ -67,75 +66,77 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
                                 startActivity(intent);
+                                finish();
                             }
                         }).show();
-            //}
+            }
+
         }
-        db = helper.getWritableDatabase();
-        lockedApps = dataBaseUtil.getAll(db);
-        status = dataBaseUtil.getStatus(db);
-        if (status.equals("error")){
-            ContentValues cv = new ContentValues();
-            cv.put("status", "true");
-            db.insert("settings", null, cv);
-        }
-        listItems = new ArrayList<Map<String,Object>>();
-        //Intent intent = getIntent();
-        ArrayList<String> appList = new ArrayList<String>();
-        List<PackageInfo> packages = getPackageManager()
-                .getInstalledPackages(0);
-        for (int i = 0; i < packages.size(); i++) {
-            // for (ResolveInfo resolveInfo : allMatches) {
-            PackageInfo packageInfo = packages.get(i);
+         if (isNoSwitch()){
+            db = helper.getWritableDatabase();
+            lockedApps = dataBaseUtil.getAll(db);
+            status = dataBaseUtil.getStatus(db);
+            if (status.equals("error")){
+                ContentValues cv = new ContentValues();
+                cv.put("status", "true");
+                db.insert("settings", null, cv);
+            }
+            listItems = new ArrayList<Map<String,Object>>();
+            //Intent intent = getIntent();
+            ArrayList<String> appList = new ArrayList<String>();
+            List<PackageInfo> packages = getPackageManager()
+                    .getInstalledPackages(0);
+            for (int i = 0; i < packages.size(); i++) {
+                // for (ResolveInfo resolveInfo : allMatches) {
+                PackageInfo packageInfo = packages.get(i);
 
 
-            if (isUserApp(packageInfo)) {
-                appList.add(packageInfo.packageName);
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("info", "installed app");
-                map.put("name",
-                        packageInfo.applicationInfo.loadLabel(
-                                getPackageManager()).toString());
-                map.put("packageName", packageInfo.applicationInfo.packageName);
-                map.put("icon", packageInfo.applicationInfo
-                        .loadIcon(getPackageManager()));
-                if (isLocked(packageInfo,lockedApps)){
-                    map.put("flag", "已锁定");
-                    lockList.add(packageInfo.applicationInfo.packageName);
-                }else {
-                    map.put("flag", "锁定");
+                if (isUserApp(packageInfo)) {
+                    appList.add(packageInfo.packageName);
+                    Map<String, Object> map = new HashMap<String, Object>();
+                    map.put("info", "installed app");
+                    map.put("name",
+                            packageInfo.applicationInfo.loadLabel(
+                                    getPackageManager()).toString());
+                    map.put("packageName", packageInfo.applicationInfo.packageName);
+                    map.put("icon", packageInfo.applicationInfo
+                            .loadIcon(getPackageManager()));
+                    if (isLocked(packageInfo,lockedApps)){
+                        map.put("flag", "已锁定");
+                        lockList.add(packageInfo.applicationInfo.packageName);
+                    }else {
+                        map.put("flag", "锁定");
+                    }
+
+                    //lockList.add(packageInfo.applicationInfo.packageName);
+                    listItems.add(map);
+                    Log.i("test", packageInfo.applicationInfo.loadLabel(
+                            getPackageManager()).toString());
                 }
+            }
+            myList = (ListView)findViewById(R.id.list);
+            listViewAdapter = new ListViewAdapter(this,listItems);
+            myList.setAdapter(listViewAdapter);
+            Receiver r = new Receiver();
 
-                //lockList.add(packageInfo.applicationInfo.packageName);
-                listItems.add(map);
-                Log.i("test", packageInfo.applicationInfo.loadLabel(
-                        getPackageManager()).toString());
+            if (status.equals("true")){
+                Intent intent = new Intent("android.intent.action.MAIN_BROADCAST");
+                intent.putStringArrayListExtra("lockList", lockList);
+                intent.putExtra("status", "true");
+                sendBroadcast(intent);
+            }else{
+                Intent intent = new Intent("android.intent.action.MAIN_BROADCAST");
+                intent.putStringArrayListExtra("lockList", lockList);
+                intent.putExtra("status","false");
+                sendBroadcast(intent);
             }
         }
-        myList = (ListView)findViewById(R.id.list);
-        listViewAdapter = new ListViewAdapter(this,listItems);
-        myList.setAdapter(listViewAdapter);
-        Receiver r = new Receiver();
-
-        if (status.equals("true")){
-            Intent intent = new Intent("android.intent.action.MAIN_BROADCAST");
-            intent.putStringArrayListExtra("lockList", lockList);
-            intent.putExtra("status", "true");
-            sendBroadcast(intent);
-        }else{
-            Intent intent = new Intent("android.intent.action.MAIN_BROADCAST");
-            intent.putStringArrayListExtra("lockList", lockList);
-            intent.putExtra("status","false");
-            sendBroadcast(intent);
-        }
-
-
 
     }
 
     @Override
     protected void onStop() {
-        lockedApps = dataBaseUtil.getAll(db);
+//        lockedApps = dataBaseUtil.getAll(db);
         super.onStop();
     }
 
