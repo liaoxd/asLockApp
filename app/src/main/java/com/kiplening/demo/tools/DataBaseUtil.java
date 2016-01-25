@@ -19,6 +19,7 @@ public class DataBaseUtil {
     //table name
     private String tableName = "app";
 
+
     public ArrayList<App> getAll(SQLiteDatabase db){
         ArrayList<App> lockList = new ArrayList<App>();
         Cursor c = db.rawQuery("select * from "+ tableName,null);
@@ -71,13 +72,46 @@ public class DataBaseUtil {
         }
 
     }
-    public boolean isLocked(String packageName,ArrayList<App> lockedApps){
-        for (App a:lockedApps) {
-            if (packageName.equals(a.getPackageName())){
-
-                return true;
+    public String getPWD(SQLiteDatabase db){
+        String result;
+        Cursor c = db.rawQuery("select * from settings", null);
+        if (c.moveToFirst()) { //判断游标是否为空
+            result = c.getString(c.getColumnIndex("password"));
+            if (result != null){
+                return result;
             }
+            return "123456";
+        }else {
+            ContentValues cv = new ContentValues();
+            cv.put("password","123456");
+            db.insert("settings",null,cv);
+            return "123456";
         }
-        return false;
+    }
+    public boolean setPWD(SQLiteDatabase db,String password){
+        //实例化内容值
+        ContentValues values = new ContentValues();
+        //在values中添加内容
+        values.put("password",password);
+        //修改条件
+        String whereClause = "id=?";
+        //修改添加参数
+        String[] whereArgs= new String[]{String.valueOf("host")};
+        //修改
+        db.update("settings",values,whereClause,whereArgs);
+        return true;
+    }
+    public String getEmail(){
+        String result;
+        Cursor c = db.rawQuery("select * from settings", null);
+        if (c.moveToFirst()) { //判断游标是否为空
+            result = c.getString(c.getColumnIndex("email"));
+            return result;
+        }else {
+            ContentValues cv = new ContentValues();
+            cv.put("email","null");
+            db.insert("settings",null,cv);
+            return "null";
+        }
     }
 }

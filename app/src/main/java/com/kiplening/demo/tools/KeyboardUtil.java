@@ -2,6 +2,7 @@ package com.kiplening.demo.tools;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.text.Editable;
@@ -22,12 +23,17 @@ public class KeyboardUtil {
     private Keyboard k;
     private EditText ed;
 
-    private String password = "123456";
+
+    private String password ;
 
     public KeyboardUtil(Activity act, Context ctx, EditText editText) {
         this.act = act;
         this.ctx = ctx;
         this.ed = editText;
+        DataBaseHelper helper = new DataBaseHelper(act,"kiplening",null,1,null);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        DataBaseUtil dataBaseUtil = new DataBaseUtil();
+        password = dataBaseUtil.getPWD(db);
         try {
             k = new Keyboard(ctx, R.xml.symbol);
         }catch (Exception e){
@@ -61,11 +67,11 @@ public class KeyboardUtil {
             if (primaryCode == -5) {// 完成
                 if (ed.getText().toString().equals(password)){
                     //act.finish();
-                    act.finishAndRemoveTask();
+                    act.finish();
                 }
                 else {
-                    start = 0;
-                    Toast.makeText(act,"密码错误，请重输",Toast.LENGTH_SHORT).show();
+                    editable.delete(0, start);
+                    Toast.makeText(act,"密码错误，请重输"+password,Toast.LENGTH_SHORT).show();
                 }
 
                 hideKeyboard();

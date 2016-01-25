@@ -24,8 +24,11 @@
             android:name=".activity.UnLockActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".activity.SettingActivity"
+            android:name=".activity.settings.SettingActivity"
             android:label="@string/app_name" />
+        <activity
+            android:name=".activity.settings.SetPwdActivity"
+            android:label="修改密码" />
         <service
             android:name=".service.LockService"
             android:enabled="true"

@@ -20,10 +20,8 @@ public class DataBaseHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         System.out.println("Create a DataBase.");
 
-            db.execSQL("create table app(packageName text PRIMARY KEY,name text)");
-            db.execSQL("create table settings(status text)");
-
-
+        db.execSQL("create table app(packageName text PRIMARY KEY,name text)");
+        db.execSQL("create table settings(id text PRIMARY KEY,status text,password text,email text)");
     }
 
     @Override
