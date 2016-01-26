@@ -1,9 +1,7 @@
 package com.kiplening.demo.tools;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,19 +23,14 @@ public class SettingListViewAdapter extends BaseAdapter {
     private LayoutInflater listContainer;
     private ListItemView listItemView;
     private String status;
-
-    private SQLiteDatabase db;
-    private String dataBaseName = "kiplening";
-    private String tableName = "settings";
-    private final DataBaseHelper helper;
     private ArrayList<String> lockList;
-    private DataBaseUtil dataBaseUtil = new DataBaseUtil();
+    private DataBaseUtil dataBaseUtil;
 
     public SettingListViewAdapter(Context context,String status) {
         this.context = context;
         this.status = status;
-        helper = new DataBaseHelper(context,dataBaseName,null,1,null);
-        db = helper.getWritableDatabase();
+        dataBaseUtil = new DataBaseUtil(context);
+
         listContainer = LayoutInflater.from(context);
     }
 
@@ -85,22 +78,17 @@ public class SettingListViewAdapter extends BaseAdapter {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                lockList = dataBaseUtil.getAllLocked(db);
+                lockList = dataBaseUtil.getAllLocked();
                 if (isChecked) {
-                    db.execSQL("delete from settings");
-                    ContentValues cv = new ContentValues();
-                    cv.put("status", "true");
-                    db.insert("settings",null,cv);
+
+                    dataBaseUtil.setStatus("true");
                     Intent intent = new Intent("android.intent.action.SET_BROADCAST");
                     intent.putStringArrayListExtra("lockList", lockList);
                     intent.putExtra("status", "true");
                     context.sendBroadcast(intent);
-                    System.out.println(dataBaseUtil.getStatus(db));
+                    System.out.println(dataBaseUtil.getStatus());
                 } else {
-                    db.execSQL("delete from settings");
-                    ContentValues cv = new ContentValues();
-                    cv.put("status", "false");
-                    db.insert("settings", null, cv);
+                    dataBaseUtil.setStatus("false");
                     Intent intent = new Intent("android.intent.action.SET_BROADCAST");
                     intent.putStringArrayListExtra("lockList", lockList);
                     intent.putExtra("status", "false");

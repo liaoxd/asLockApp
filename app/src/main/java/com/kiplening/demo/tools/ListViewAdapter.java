@@ -35,11 +35,11 @@ public class ListViewAdapter extends BaseAdapter{
     private String dataBaseName = "kiplening";
     private String tableName = "app";
     private final DataBaseHelper helper;
-    private DataBaseUtil dataBaseUtil = new DataBaseUtil();
+    private DataBaseUtil dataBaseUtil;
 
     public ListViewAdapter(Context context,List<Map<String,Object>> listItems) {
         this.context = context;
-
+        dataBaseUtil = new DataBaseUtil(context);
         helper = new DataBaseHelper(context,dataBaseName,null,1,null);
         db = helper.getWritableDatabase();
         //创建视图容器
@@ -94,7 +94,7 @@ public class ListViewAdapter extends BaseAdapter{
                 if (listItems.get(position).get("flag").equals("已锁定")) {
                     listItems.get(position).put("flag", "锁定");
 
-                    if(dataBaseUtil.delete(db,app) == 0){
+                    if(dataBaseUtil.delete(app) == 0){
                         Log.i(tableName, "delete failed! ");
                     }
                     else {
@@ -104,7 +104,7 @@ public class ListViewAdapter extends BaseAdapter{
                 }
                 else {
                     listItems.get(position).put("flag", "已锁定");
-                    if(dataBaseUtil.insert(db,app) == -1){
+                    if(dataBaseUtil.insert(app) == -1){
                         Log.i(tableName, "insert failed! ");
                     }
                     else {
@@ -114,8 +114,8 @@ public class ListViewAdapter extends BaseAdapter{
                 }
                 //thread.start();
                 notifyDataSetChanged();
-                String status = dataBaseUtil.getStatus(db);
-                ArrayList<String> lockList = dataBaseUtil.getAllLocked(db);
+                String status = dataBaseUtil.getStatus();
+                ArrayList<String> lockList = dataBaseUtil.getAllLocked();
                 if (status.equals("true")){
                     Intent intent = new Intent("android.intent.action.MAIN_BROADCAST");
                     intent.putStringArrayListExtra("lockList", lockList);

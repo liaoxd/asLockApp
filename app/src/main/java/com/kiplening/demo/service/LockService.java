@@ -174,9 +174,9 @@ public class LockService extends Service{
         }
 
         //Log.v("LockService", "packageName == " + packageName);
-        System.out.println(lockName.size());
-        System.out.println(status);
-        System.out.println(status.equals("false"));
+        //System.out.println(lockName.size());
+        //System.out.println(status);
+        //System.out.println(status.equals("false"));
         for (int i = 0; i < lockName.size(); i++) {
             System.out.println(lockName.get(i));
             if(lockName.get(i).equals(packageName)){

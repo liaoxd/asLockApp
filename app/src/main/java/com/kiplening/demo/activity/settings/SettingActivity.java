@@ -38,7 +38,7 @@ public class SettingActivity extends AppCompatActivity{
         final View inputEmail = layoutInflater.inflate(R.layout.setting_email, null);
         final Context context = this;
         db = helper.getWritableDatabase();
-        final DataBaseUtil dataBaseUtil = new DataBaseUtil();
+        final DataBaseUtil dataBaseUtil = new DataBaseUtil(this);
 
 
         Intent intent = this.getIntent();

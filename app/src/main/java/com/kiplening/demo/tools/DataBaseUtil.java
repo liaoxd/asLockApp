@@ -1,6 +1,7 @@
 package com.kiplening.demo.tools;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -12,15 +13,37 @@ import java.util.ArrayList;
  * Created by MOON on 1/20/2016.
  */
 public class DataBaseUtil {
-    SQLiteDatabase db;
+    private SQLiteDatabase db;
 
     //name of database
     private String dataBaseName = "kiplening";
     //table name
     private String tableName = "app";
+    private Context context;
 
+    public DataBaseUtil(Context context) {
+        this.context = context;
+        DataBaseHelper helper = new DataBaseHelper(context,dataBaseName,null,1,null);
+        db = helper.getWritableDatabase();
+        Cursor c = db.rawQuery("select * from settings",null);
+        if (c != null){
+            if (c.moveToFirst()){
+                if (c.getString(c.getColumnIndex("id")) != null){
+                    if (c.getString(c.getColumnIndexOrThrow("id")).equals("host")){
+                        ContentValues cv = new ContentValues();
+                        cv.put("id","host");
+                        cv.put("password","null");
+                        cv.put("status","true");
+                        cv.put("email","null");
+                        db.insert("settings",null,cv);
+                    }
+                }
 
-    public ArrayList<App> getAll(SQLiteDatabase db){
+            }
+        }
+    }
+
+    public ArrayList<App> getAll(){
         ArrayList<App> lockList = new ArrayList<App>();
         Cursor c = db.rawQuery("select * from "+ tableName,null);
         if (c.moveToFirst()){ //判断游标是否为空
@@ -35,8 +58,8 @@ public class DataBaseUtil {
         }
         return lockList;
     }
-    public ArrayList<String> getAllLocked(SQLiteDatabase db){
-        ArrayList<App> allApp = this.getAll(db);
+    public ArrayList<String> getAllLocked(){
+        ArrayList<App> allApp = this.getAll();
         ArrayList<String> result = new ArrayList<>();
         for (App a:
              allApp) {
@@ -45,7 +68,7 @@ public class DataBaseUtil {
         return result;
     }
 
-    public long insert(SQLiteDatabase db,App app){
+    public long insert(App app){
         ContentValues cv = new ContentValues();
         cv.put("packageName",app.getPackageName());
         cv.put("name",app.getName());
@@ -53,12 +76,12 @@ public class DataBaseUtil {
         return result;
     }
 
-    public Long delete(SQLiteDatabase db,App app){
+    public Long delete(App app){
         String[] args = {String.valueOf(app.getPackageName())};
         long result = db.delete(tableName, "packageName=?", args);
         return result;
     }
-    public String getStatus(SQLiteDatabase db){
+    public String getStatus(){
         String result;
         Cursor c = db.rawQuery("select * from settings", null);
         if (c.moveToFirst()) { //判断游标是否为空
@@ -72,15 +95,29 @@ public class DataBaseUtil {
         }
 
     }
-    public String getPWD(SQLiteDatabase db){
+    public void setStatus(String status){
+        ContentValues cv = new ContentValues();
+        cv.put("status", status);
+        db.insert("settings",null,cv);
+        //修改条件
+        String whereClause = "id=?";
+        //修改添加参数
+        String[] whereArgs= new String[]{String.valueOf("host")};
+        //修改
+        db.update("settings", cv, whereClause, whereArgs);
+
+    }
+    public String getPWD(){
         String result;
         Cursor c = db.rawQuery("select * from settings", null);
         if (c.moveToFirst()) { //判断游标是否为空
+            //System.out.println(c.getString(c.getColumnIndex("id")));
             result = c.getString(c.getColumnIndex("password"));
             if (result != null){
                 return result;
             }
-            return "123456";
+            return "null";
+
         }else {
             ContentValues cv = new ContentValues();
             cv.put("password","123456");
@@ -88,17 +125,24 @@ public class DataBaseUtil {
             return "123456";
         }
     }
-    public boolean setPWD(SQLiteDatabase db,String password){
+    public boolean setPWD(String password){
         //实例化内容值
-        ContentValues values = new ContentValues();
+        //ContentValues values = new ContentValues();
         //在values中添加内容
-        values.put("password",password);
+        //values.put("password",password);
         //修改条件
-        String whereClause = "id=?";
+        //String whereClause = "id=?";
         //修改添加参数
-        String[] whereArgs= new String[]{String.valueOf("host")};
+        //String[] whereArgs= new String[]{String.valueOf("host")};
         //修改
-        db.update("settings",values,whereClause,whereArgs);
+        //db.update("settings",values,whereClause,whereArgs);
+        //db.execSQL("UPDATE settings SET password = "+password+" WHERE id = host");
+        ContentValues cv = new ContentValues();
+        cv.put("id", "host");
+        cv.put("password", password);
+
+        String[] args = {String.valueOf("host")};
+        db.update("settings", cv, "id=?",args);
         return true;
     }
     public String getEmail(){

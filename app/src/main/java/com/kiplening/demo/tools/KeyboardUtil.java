@@ -2,7 +2,6 @@ package com.kiplening.demo.tools;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.text.Editable;
@@ -25,15 +24,15 @@ public class KeyboardUtil {
 
 
     private String password ;
+    final DataBaseUtil dataBaseUtil;
 
     public KeyboardUtil(Activity act, Context ctx, EditText editText) {
         this.act = act;
         this.ctx = ctx;
         this.ed = editText;
         DataBaseHelper helper = new DataBaseHelper(act,"kiplening",null,1,null);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        DataBaseUtil dataBaseUtil = new DataBaseUtil();
-        password = dataBaseUtil.getPWD(db);
+        dataBaseUtil = new DataBaseUtil(ctx);
+
         try {
             k = new Keyboard(ctx, R.xml.symbol);
         }catch (Exception e){
@@ -64,6 +63,7 @@ public class KeyboardUtil {
         public void onKey(int primaryCode, int[] keyCodes) {
             Editable editable = ed.getText();
             int start = ed.getSelectionStart();
+            password = dataBaseUtil.getPWD();
             if (primaryCode == -5) {// 完成
                 if (ed.getText().toString().equals(password)){
                     //act.finish();

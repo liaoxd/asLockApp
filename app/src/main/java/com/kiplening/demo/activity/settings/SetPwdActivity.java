@@ -3,7 +3,6 @@ package com.kiplening.demo.activity.settings;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -34,8 +33,7 @@ public class SetPwdActivity extends AppCompatActivity {
         context = this;
         setContentView(R.layout.activity_set_pwd);
 
-        final SQLiteDatabase db = helper.getWritableDatabase();
-        final DataBaseUtil dataBaseUtil = new DataBaseUtil();
+        final DataBaseUtil dataBaseUtil = new DataBaseUtil(this);
 
 
         buttonOK = (Button)findViewById(R.id.set_pwd_ok);
@@ -50,7 +48,7 @@ public class SetPwdActivity extends AppCompatActivity {
                 if (inputPWD.getText().toString().equals(inputPWDAgain.getText().toString())){
                     //inputPWD.getText()
                     String password = inputPWD.getText().toString();
-                    if (dataBaseUtil.setPWD(db,password)) {
+                    if (dataBaseUtil.setPWD(password)) {
                         System.out.println("更改成功");
                         new AlertDialog.Builder(context)
                                 .setMessage("更改密码成功")

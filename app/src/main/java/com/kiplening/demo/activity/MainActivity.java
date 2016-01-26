@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +20,6 @@ import com.kiplening.demo.R;
 import com.kiplening.demo.activity.settings.SettingActivity;
 import com.kiplening.demo.module.App;
 import com.kiplening.demo.service.Receiver;
-import com.kiplening.demo.tools.DataBaseHelper;
 import com.kiplening.demo.tools.DataBaseUtil;
 import com.kiplening.demo.tools.ListViewAdapter;
 
@@ -43,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
     private String dataBaseName = "kiplening";
     private String tableName = "app";
-    public final DataBaseHelper helper = new DataBaseHelper(this,dataBaseName,null,1,null);
-    private SQLiteDatabase db;
     private DataBaseUtil dataBaseUtil;
 
     private String status;
@@ -126,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent i = new Intent(MainActivity.this,SettingActivity.class);
-            status = dataBaseUtil.getStatus(db);
+            status = dataBaseUtil.getStatus();
             i.putExtra("status",status);
             startActivity(i);
             return true;
@@ -158,14 +154,14 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
     private void jumpIn(){
-        db = helper.getWritableDatabase();
-        dataBaseUtil = new DataBaseUtil();
-        lockedApps = dataBaseUtil.getAll(db);
-        status = dataBaseUtil.getStatus(db);
+
+        dataBaseUtil = new DataBaseUtil(this);
+        lockedApps = dataBaseUtil.getAll();
+        status = dataBaseUtil.getStatus();
         if (status.equals("error")){
             ContentValues cv = new ContentValues();
             cv.put("status", "true");
-            db.insert("settings", null, cv);
+            //db.insert("settings", null, cv);
         }
         listItems = new ArrayList<Map<String,Object>>();
         //Intent intent = getIntent();
