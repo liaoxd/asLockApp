@@ -32,7 +32,7 @@ public class LockService extends Service{
     private final static int LOOPHANDLER = 0;
     private HandlerThread handlerThread = null;
 
-    private ArrayList<String> lockName = new ArrayList<String>();
+    private ArrayList<String> lockName = new ArrayList<>();
     private boolean isUnLockActivity = false;
     private String status;
 
@@ -116,7 +116,6 @@ public class LockService extends Service{
             UsageStatsManager usageStatsManager = (UsageStatsManager) getApplicationContext()
                     .getSystemService("usagestats");
 
-
             long ts = System.currentTimeMillis();
             List<UsageStats> queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST,0, ts);
 
@@ -126,7 +125,7 @@ public class LockService extends Service{
                     recentStats = usageStats;
                 }
             }
-            packageName = recentStats.getPackageName();
+            packageName = recentStats != null ? recentStats.getPackageName() : null;
         } else{
             // 5.0之前
             // 获取正在运行的任务栈(一个应用程序占用一个任务栈) 最近使用的任务栈会在最前面
@@ -135,8 +134,6 @@ public class LockService extends Service{
             packageName = mActivityManager.getRunningTasks(1).get(0).topActivity.getPackageName();
             //Log.i(TAG,packageName);
         }
-
-
 
         /*
         ComponentName topActivity = mActivityManager.getRunningTasks(1).get(0).topActivity;
@@ -148,7 +145,7 @@ public class LockService extends Service{
 
 
         //String packageName = ""; /* Android5.0之后获取程序锁的方式是不一样的*/
-/*据说能成功的方法,在魅族上面测试不通过
+        /*据说能成功的方法,在魅族上面测试不通过
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
         // 5.0及其以后的版本
             System.out.println("hahahahahahaha");
@@ -173,10 +170,6 @@ public class LockService extends Service{
             isUnLockActivity = false;
         }
 
-        //Log.v("LockService", "packageName == " + packageName);
-        //System.out.println(lockName.size());
-        //System.out.println(status);
-        //System.out.println(status.equals("false"));
         for (int i = 0; i < lockName.size(); i++) {
             System.out.println(lockName.get(i));
             if(lockName.get(i).equals(packageName)){
@@ -184,7 +177,6 @@ public class LockService extends Service{
                 return true;
             }
         }
-
         return false;
     }
 

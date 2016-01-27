@@ -106,7 +106,4 @@ public class SettingListViewAdapter extends BaseAdapter {
         TextView textView;
         CheckBox checkBox;
     }
-    class ListItemView2{
-        TextView pwd;
-    }
 }

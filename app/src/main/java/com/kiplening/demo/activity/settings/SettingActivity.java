@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -15,7 +14,6 @@ import android.widget.Toast;
 
 import com.kiplening.demo.R;
 import com.kiplening.demo.tools.DataBaseHelper;
-import com.kiplening.demo.tools.DataBaseUtil;
 import com.kiplening.demo.tools.SettingListViewAdapter;
 
 /**
@@ -27,7 +25,6 @@ public class SettingActivity extends AppCompatActivity{
     private ListView myList;
     private TextView email,pwd,about;
     public final DataBaseHelper helper = new DataBaseHelper(this,dataBaseName,null,1,null);
-    private SQLiteDatabase db;
     private SettingListViewAdapter adapter;
 
     @Override
@@ -37,9 +34,6 @@ public class SettingActivity extends AppCompatActivity{
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         final View inputEmail = layoutInflater.inflate(R.layout.setting_email, null);
         final Context context = this;
-        db = helper.getWritableDatabase();
-        final DataBaseUtil dataBaseUtil = new DataBaseUtil(this);
-
 
         Intent intent = this.getIntent();
         String status = intent.getStringExtra("status");
@@ -63,7 +57,6 @@ public class SettingActivity extends AppCompatActivity{
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                return;
                             }
                         })
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -78,11 +71,11 @@ public class SettingActivity extends AppCompatActivity{
         pwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //String pwd = dataBaseUtil.getPWD(db);
+
                 Intent intent = new Intent(SettingActivity.this,SetPwdActivity.class);
-                //pwdIntent.putExtra("password","hehe");
+
                 startActivity(intent);
-                //Toast.makeText(SettingActivity.this, "ok", Toast.LENGTH_SHORT).show();
+
             }
         });
         about.setOnClickListener(new View.OnClickListener() {

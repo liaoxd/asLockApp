@@ -25,7 +25,6 @@ public class UnLockActivity extends AppCompatActivity{
     private Context ctx;
     private Activity act;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,14 +71,12 @@ public class UnLockActivity extends AppCompatActivity{
                     }
                 }
                 int inputback = edit.getInputType();
-                //edit.setInputType(InputType.TYPE_NULL);
                 try {
                     KeyboardUtil ku = new KeyboardUtil(act, ctx, edit);
                     ku.showKeyboard();
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-
                 edit.setInputType(inputback);
                 return false;
             }
@@ -94,7 +91,6 @@ public class UnLockActivity extends AppCompatActivity{
         {
             return true;//阻止事件继续向下分发
         }
-
         return super.onKeyDown(keyCode, event);
     }
 

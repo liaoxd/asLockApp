@@ -43,8 +43,6 @@ public class KeyboardUtil {
         keyboardView = (KeyboardView)act.findViewById(R.id.keyboard_view);
         keyboardView.setKeyboard(k);
         keyboardView.setEnabled(true);
-        //keyboardView.setPreviewEnabled(true);
-        //keyboardView.setVisibility(View.VISIBLE);
         keyboardView.setOnKeyboardActionListener(listener);
     }
     private KeyboardView.OnKeyboardActionListener listener = new KeyboardView.OnKeyboardActionListener() {

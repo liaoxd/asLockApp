@@ -86,6 +86,5 @@ public class SetPwdActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 }
