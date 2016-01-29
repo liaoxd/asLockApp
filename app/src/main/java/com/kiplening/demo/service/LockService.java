@@ -111,7 +111,7 @@ public class LockService extends Service{
         ActivityManager mActivityManager;
         mActivityManager = (ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE);
 
-        String packageName = null,lable;
+        String packageName ;
         if (Build.VERSION.SDK_INT > 20) {
             UsageStatsManager usageStatsManager = (UsageStatsManager) getApplicationContext()
                     .getSystemService("usagestats");

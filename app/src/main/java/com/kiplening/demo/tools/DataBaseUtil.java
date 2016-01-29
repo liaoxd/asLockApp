@@ -19,10 +19,8 @@ public class DataBaseUtil {
     private String dataBaseName = "kiplening";
     //table name
     private String tableName = "app";
-    private Context context;
 
     public DataBaseUtil(Context context) {
-        this.context = context;
         DataBaseHelper helper = new DataBaseHelper(context, dataBaseName, null, 1, null);
         db = helper.getWritableDatabase();
         Cursor c = db.rawQuery("select * from settings", null);
@@ -42,6 +40,10 @@ public class DataBaseUtil {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<App> getAll() {
         ArrayList<App> lockList = new ArrayList<>();
         Cursor c = db.rawQuery("select * from " + tableName, null);
@@ -58,6 +60,10 @@ public class DataBaseUtil {
         return lockList;
     }
 
+    /**
+     *  获取数据库当中所有锁定了的应用
+     * @return 返回一个ArrayList<String>的数据
+     */
     public ArrayList<String> getAllLocked() {
         ArrayList<App> allApp = this.getAll();
         ArrayList<String> result = new ArrayList<>();
@@ -82,6 +88,10 @@ public class DataBaseUtil {
         return result;
     }
 
+    /**
+     *  获取当前应用锁的工作状态，为true表示应用锁开启，否则表示应用锁关闭
+     * @return
+     */
     public String getStatus() {
         String result;
         Cursor c = db.rawQuery("select * from settings", null);
@@ -97,6 +107,10 @@ public class DataBaseUtil {
 
     }
 
+    /**
+     * 设置当前应用锁的开关状态。
+     * @param status
+     */
     public void setStatus(String status) {
         ContentValues cv = new ContentValues();
         cv.put("status", status);
@@ -111,28 +125,30 @@ public class DataBaseUtil {
     }
 
     /**
-     *
-     *
+     * 获取数据库当中的锁定密码
+     * @return 锁定密码，String型的数据
      */
     public String getPWD() {
         String result;
         Cursor c = db.rawQuery("select * from settings", null);
         if (c.moveToFirst()) { //判断游标是否为空
             //System.out.println(c.getString(c.getColumnIndex("id")));
-            result = c.getString(c.getColumnIndex("password"));
-            if (result != null) {
+            if (c.getString(c.getColumnIndex("host")).equals("host")){
+                result = c.getString(c.getColumnIndex("password"));
                 return result;
             }
             return "null";
 
         } else {
-            ContentValues cv = new ContentValues();
-            cv.put("password", "123456");
-            db.insert("settings", null, cv);
-            return "123456";
+            return "null";
         }
     }
 
+    /**
+     *  设置锁定密码，并且将其存入数据库当中。
+     * @param password
+     * @return 插入则返回true的boolean型数据
+     */
     public boolean setPWD(String password) {
         ContentValues cv = new ContentValues();
         cv.put("id", "host");
@@ -143,6 +159,10 @@ public class DataBaseUtil {
         return true;
     }
 
+    /**
+     * 获取数据库当中的Email
+     * @return 返回string型的Email数据
+     */
     public String getEmail() {
         String result;
         Cursor c = db.rawQuery("select * from settings", null);

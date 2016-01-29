@@ -37,12 +37,12 @@ public class MainActivity extends AppCompatActivity {
     private DataBaseUtil dataBaseUtil;
     private String status;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        dataBaseUtil.getPWD();
         int currentVersion = android.os.Build.VERSION.SDK_INT;
         if (currentVersion > 20) {
             if (!isNoSwitch()) {
@@ -63,12 +63,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             jumpIn();
         }
-    }
-
-    @Override
-    protected void onStop() {
-//        lockedApps = dataBaseUtil.getAll(db);
-        super.onStop();
     }
 
     public boolean isSystemApp(PackageInfo pInfo) {
@@ -93,43 +87,6 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent i = new Intent(MainActivity.this, SettingActivity.class);
-            status = dataBaseUtil.getStatus();
-            i.putExtra("status", status);
-            startActivity(i);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (KeyEvent.KEYCODE_BACK == event.getKeyCode()) {
-            finish();
-        }
-        if (KeyEvent.KEYCODE_HOME == event.getKeyCode()) {
-            finish();
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
     private boolean isNoSwitch() {
         long ts = System.currentTimeMillis();
         UsageStatsManager usageStatsManager = (UsageStatsManager) getApplicationContext()
@@ -139,6 +96,9 @@ public class MainActivity extends AppCompatActivity {
         return !(queryUsageStats == null || queryUsageStats.isEmpty());
     }
 
+    /**
+     * 在首页判断完手机的
+     */
     private void jumpIn() {
         dataBaseUtil = new DataBaseUtil(this);
         lockedApps = dataBaseUtil.getAll();
@@ -192,5 +152,47 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("status", "false");
             sendBroadcast(intent);
         }
+    }
+
+    @Override
+    protected void onStop() {
+//        lockedApps = dataBaseUtil.getAll(db);
+        super.onStop();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KeyEvent.KEYCODE_BACK == event.getKeyCode()) {
+            finish();
+        }
+        if (KeyEvent.KEYCODE_HOME == event.getKeyCode()) {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            Intent i = new Intent(MainActivity.this, SettingActivity.class);
+            status = dataBaseUtil.getStatus();
+            i.putExtra("status", status);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
