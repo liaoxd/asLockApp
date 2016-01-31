@@ -136,8 +136,9 @@ public class DataBaseUtil {
             if (c.getString(c.getColumnIndex("host")).equals("host")){
                 result = c.getString(c.getColumnIndex("password"));
                 return result;
+            }else {
+                return "null";
             }
-            return "null";
 
         } else {
             return "null";

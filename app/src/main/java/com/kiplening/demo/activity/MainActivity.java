@@ -42,7 +42,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dataBaseUtil.getPWD();
+        String password = dataBaseUtil.getPWD();
+        if (password.equals("null")){
+
+        }
         int currentVersion = android.os.Build.VERSION.SDK_INT;
         if (currentVersion > 20) {
             if (!isNoSwitch()) {
