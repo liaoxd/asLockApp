@@ -133,7 +133,7 @@ public class DataBaseUtil {
         Cursor c = db.rawQuery("select * from settings", null);
         if (c.moveToFirst()) { //判断游标是否为空
             //System.out.println(c.getString(c.getColumnIndex("id")));
-            if (c.getString(c.getColumnIndex("host")).equals("host")){
+            if (c.getString(c.getColumnIndex("id")).equals("host")){
                 result = c.getString(c.getColumnIndex("password"));
                 return result;
             }else {

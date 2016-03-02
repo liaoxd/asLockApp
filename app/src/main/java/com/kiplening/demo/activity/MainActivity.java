@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.kiplening.demo.R;
+import com.kiplening.demo.activity.common.MyApplication;
 import com.kiplening.demo.activity.settings.SettingActivity;
 import com.kiplening.demo.module.App;
 import com.kiplening.demo.tools.DataBaseUtil;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        dataBaseUtil = new DataBaseUtil(getApplication());
         String password = dataBaseUtil.getPWD();
         if (password.equals("null")){
 
