@@ -2,4 +2,19 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- ActionBar的高度，以及里面的图标大小设置 -->
+    <dimen name="actionBarH">50dp</dimen>
+    <dimen name="iconH">40dp</dimen>
+    <dimen name="actionBarPadding">5dp</dimen>
+    <dimen name="timeTextSize">35dp</dimen>
+
+    <!-- timerController 图标的大小，以及布局相关 -->
+    <dimen name="controllerSize">60dp</dimen>
+    <dimen name="controllerViewSize">200dp</dimen>
+    <dimen name="controllerPadding">70dp</dimen>
+
+    <!-- 设置栏布局的一些参数 -->
+    <dimen name="sNameH">30dp</dimen>
+    <dimen name="settingsH">50dp</dimen>
 </resources>

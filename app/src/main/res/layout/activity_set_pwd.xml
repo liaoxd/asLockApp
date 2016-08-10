@@ -8,11 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:paddingTop="15dp"
-        android:textSize="25dp"/>
+        android:textSize="25dp"
+        />
     <EditText
         android:id="@+id/input_pwd"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"/>
     <TextView
         android:text="再次输入:"
         android:layout_width="match_parent"
@@ -22,7 +24,8 @@
     <EditText
         android:id="@+id/input_pwdAgain"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"/>
     <TextView
         android:id="@+id/wrong_pwd"
         android:layout_width="wrap_content"

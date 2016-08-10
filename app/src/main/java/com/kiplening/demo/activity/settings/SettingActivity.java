@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ListView;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +22,7 @@ import com.kiplening.demo.tools.SettingListViewAdapter;
 public class SettingActivity extends AppCompatActivity{
     private String dataBaseName = "kiplening";
 
-    private ListView myList;
+    private CheckBox isOpen;
     private TextView email,pwd,about;
     public final DataBaseHelper helper = new DataBaseHelper(this,dataBaseName,null,1,null);
     private SettingListViewAdapter adapter;
@@ -38,9 +38,13 @@ public class SettingActivity extends AppCompatActivity{
         Intent intent = this.getIntent();
         String status = intent.getStringExtra("status");
 
-        myList = (ListView)findViewById(R.id.setting_list);
-        adapter = new SettingListViewAdapter(this,status);
-        myList.setAdapter(adapter);
+        isOpen = (CheckBox)findViewById(R.id.checkBox);
+        if (status.equals("true")){
+            isOpen.setChecked(true);
+        }
+        else {
+            isOpen.setChecked(false);
+        }
 
         email = (TextView)findViewById(R.id.email);
         pwd = (TextView)findViewById(R.id.pwd);

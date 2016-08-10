@@ -9,26 +9,27 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.kiplening.demo.R;
-import com.kiplening.demo.activity.common.MyApplication;
 import com.kiplening.demo.activity.settings.SettingActivity;
 import com.kiplening.demo.module.App;
 import com.kiplening.demo.tools.DataBaseUtil;
 import com.kiplening.demo.tools.ListViewAdapter;
+import com.kiplening.mylibrary.activity.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private List<Map<String, Object>> listItems;
     private ListView myList;
@@ -37,16 +38,26 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<App> lockedApps;
     private DataBaseUtil dataBaseUtil;
     private String status;
+    private Button setting;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        dataBaseUtil = new DataBaseUtil(getApplication());
-        String password = dataBaseUtil.getPWD();
-        if (password.equals("null")){
+    protected void initVariables() {
 
-        }
+    }
+
+    @Override
+    protected void initViews(Bundle savedInstanceState) {
+        setContentView(R.layout.activity_main);
+        setting = (Button) findViewById(R.id.settings);
+        setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, SettingActivity.class);
+                status = dataBaseUtil.getStatus();
+                i.putExtra("status", status);
+                startActivity(i);
+            }
+        });
         int currentVersion = android.os.Build.VERSION.SDK_INT;
         if (currentVersion > 20) {
             if (!isNoSwitch()) {
@@ -66,6 +77,15 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             jumpIn();
+        }
+    }
+
+    @Override
+    protected void loadData() {
+        dataBaseUtil = new DataBaseUtil(getApplication());
+        String password = dataBaseUtil.getPWD();
+        if (password.equals("null")){
+
         }
     }
 

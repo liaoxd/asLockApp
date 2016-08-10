@@ -3,7 +3,6 @@ package com.kiplening.demo.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -13,6 +12,7 @@ import android.widget.EditText;
 
 import com.kiplening.demo.R;
 import com.kiplening.demo.tools.KeyboardUtil;
+import com.kiplening.mylibrary.activity.BaseActivity;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -20,17 +20,21 @@ import java.lang.reflect.Method;
 /**
  * Created by MOON on 1/19/2016.
  */
-public class UnLockActivity extends AppCompatActivity{
+public class UnLockActivity extends BaseActivity{
     private EditText edit;
     private Context ctx;
     private Activity act;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_unlock);
+    protected void initVariables() {
         ctx = this;
         act = this;
+    }
+
+    @Override
+    protected void initViews(Bundle savedInstanceState) {
+        setContentView(R.layout.activity_unlock);
+
 
         edit = (EditText)this.findViewById(R.id.edit);
         edit.setOnTouchListener(new View.OnTouchListener() {
@@ -84,6 +88,11 @@ public class UnLockActivity extends AppCompatActivity{
     }
 
     @Override
+    protected void loadData() {
+
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub
         //屏蔽后退键
@@ -93,5 +102,4 @@ public class UnLockActivity extends AppCompatActivity{
         }
         return super.onKeyDown(keyCode, event);
     }
-
 }
