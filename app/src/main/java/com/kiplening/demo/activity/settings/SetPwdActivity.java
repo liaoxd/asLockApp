@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,29 +12,31 @@ import android.widget.TextView;
 import com.kiplening.demo.R;
 import com.kiplening.demo.tools.DataBaseHelper;
 import com.kiplening.demo.tools.DataBaseUtil;
+import com.kiplening.mylibrary.activity.BaseActivity;
 
 /**
  * Created by MOON on 1/25/2016.
  */
-public class SetPwdActivity extends AppCompatActivity {
+public class SetPwdActivity extends BaseActivity {
     private String dataBaseName = "kiplening";
 
     private Context context;
     private Button buttonOK,buttonCancel;
     private TextView wrongMSG;
     private EditText inputPWD,inputPWDAgain;
+    private DataBaseUtil dataBaseUtil;
     private DataBaseHelper helper = new DataBaseHelper(this,dataBaseName,null,1,null);
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initVariables() {
         context = this;
+        dataBaseUtil = new DataBaseUtil(this);
+    }
+
+    @Override
+    protected void initViews(Bundle savedInstanceState) {
         setContentView(R.layout.activity_set_pwd);
-
-        final DataBaseUtil dataBaseUtil = new DataBaseUtil(this);
-
-
         buttonOK = (Button)findViewById(R.id.set_pwd_ok);
         buttonCancel = (Button)findViewById(R.id.set_pwd_cancel);
         inputPWD = (EditText)findViewById(R.id.input_pwd);
@@ -86,5 +87,10 @@ public class SetPwdActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void loadData() {
+
     }
 }

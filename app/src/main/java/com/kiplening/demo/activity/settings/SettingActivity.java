@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -15,25 +14,26 @@ import android.widget.Toast;
 import com.kiplening.demo.R;
 import com.kiplening.demo.tools.DataBaseHelper;
 import com.kiplening.demo.tools.SettingListViewAdapter;
+import com.kiplening.mylibrary.activity.BaseActivity;
 
 /**
  * Created by MOON on 1/22/2016.
  */
-public class SettingActivity extends AppCompatActivity{
+public class SettingActivity extends BaseActivity{
     private String dataBaseName = "kiplening";
 
     private CheckBox isOpen;
     private TextView email,pwd,about;
+    private LayoutInflater layoutInflater;
+    private Context context;
     public final DataBaseHelper helper = new DataBaseHelper(this,dataBaseName,null,1,null);
     private SettingListViewAdapter adapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting);
-        LayoutInflater layoutInflater = LayoutInflater.from(this);
-        final View inputEmail = layoutInflater.inflate(R.layout.setting_email, null);
-        final Context context = this;
+    protected void initVariables() {
+        layoutInflater = LayoutInflater.from(this);
+
+        context = this;
 
         Intent intent = this.getIntent();
         String status = intent.getStringExtra("status");
@@ -45,6 +45,12 @@ public class SettingActivity extends AppCompatActivity{
         else {
             isOpen.setChecked(false);
         }
+    }
+
+    @Override
+    protected void initViews(Bundle savedInstanceState) {
+        setContentView(R.layout.activity_setting);
+        final View inputEmail = layoutInflater.inflate(R.layout.setting_email, null);
 
         email = (TextView)findViewById(R.id.email);
         pwd = (TextView)findViewById(R.id.pwd);
@@ -77,9 +83,7 @@ public class SettingActivity extends AppCompatActivity{
             public void onClick(View v) {
 
                 Intent intent = new Intent(SettingActivity.this,SetPwdActivity.class);
-
                 startActivity(intent);
-
             }
         });
         about.setOnClickListener(new View.OnClickListener() {
@@ -88,5 +92,10 @@ public class SettingActivity extends AppCompatActivity{
                 Toast.makeText(SettingActivity.this, "更多信息还未添加", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    protected void loadData() {
+
     }
 }
