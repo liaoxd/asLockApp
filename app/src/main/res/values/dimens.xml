@@ -7,7 +7,7 @@
     <dimen name="actionBarH">50dp</dimen>
     <dimen name="iconH">40dp</dimen>
     <dimen name="actionBarPadding">5dp</dimen>
-    <dimen name="timeTextSize">35dp</dimen>
+    <dimen name="timeTextSize">30dp</dimen>
 
     <!-- timerController 图标的大小，以及布局相关 -->
     <dimen name="controllerSize">60dp</dimen>
