@@ -1,5 +1,6 @@
 package com.kiplening.demo.activity;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 
 import android.app.usage.UsageStatsManager;
@@ -8,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -20,6 +22,7 @@ import android.widget.ListView;
 
 import com.kiplening.demo.R;
 import com.kiplening.demo.activity.settings.SettingActivity;
+import com.kiplening.demo.common.MyApplication;
 import com.kiplening.demo.module.App;
 import com.kiplening.demo.tools.DataBaseUtil;
 import com.kiplening.demo.tools.ListViewAdapter;
@@ -35,7 +38,7 @@ public class MainActivity extends BaseActivity {
     private List<Map<String, Object>> listItems;
     private ListView myList;
     private ListViewAdapter listViewAdapter;
-    private ArrayList<String> lockList = new ArrayList<>();
+    private ArrayList<String> lockList = MyApplication.getLockList();
     private ArrayList<App> lockedApps;
     private DataBaseUtil dataBaseUtil;
     private String status;
@@ -83,7 +86,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
-        dataBaseUtil = new DataBaseUtil(getApplication());
+        dataBaseUtil = new DataBaseUtil(MyApplication.getInstance());
         String password = dataBaseUtil.getPWD();
         if (password.equals("null")){
 
@@ -112,6 +115,7 @@ public class MainActivity extends BaseActivity {
         return false;
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private boolean isNoSwitch() {
         long ts = System.currentTimeMillis();
         UsageStatsManager usageStatsManager = (UsageStatsManager) getApplicationContext()
@@ -122,10 +126,10 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
-     * 在首页判断完手机的
+     * 在首页判断完手机的权限之后的操作
      */
     private void jumpIn() {
-        dataBaseUtil = new DataBaseUtil(this);
+        dataBaseUtil = new DataBaseUtil(MyApplication.getInstance());
         lockedApps = dataBaseUtil.getAll();
         status = dataBaseUtil.getStatus();
         if (status.equals("error")) {

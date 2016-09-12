@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.kiplening.demo.R;
+import com.kiplening.demo.common.MyApplication;
 import com.kiplening.demo.tools.DataBaseHelper;
 import com.kiplening.demo.tools.DataBaseUtil;
 import com.kiplening.mylibrary.activity.BaseActivity;
@@ -87,7 +88,7 @@ public class HomeActivity extends BaseActivity {
     protected void loadData() {
         final DataBaseUtil dataBaseUtil;
         DataBaseHelper helper = new DataBaseHelper(act,"kiplening",null,1,null);
-        dataBaseUtil = new DataBaseUtil(ctx);
+        dataBaseUtil = new DataBaseUtil(MyApplication.getInstance());
         password = dataBaseUtil.getPWD();
     }
 

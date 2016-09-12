@@ -8,13 +8,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kiplening.demo.R;
-import com.kiplening.demo.tools.DataBaseHelper;
-import com.kiplening.demo.tools.SettingListViewAdapter;
+import com.kiplening.demo.common.MyApplication;
+import com.kiplening.demo.tools.DataBaseUtil;
 import com.kiplening.mylibrary.activity.BaseActivity;
+
+import java.util.ArrayList;
 
 /**
  * Created by MOON on 1/22/2016.
@@ -25,26 +28,19 @@ public class SettingActivity extends BaseActivity{
     private CheckBox isOpen;
     private TextView email,pwd,about;
     private LayoutInflater layoutInflater;
+    private DataBaseUtil dataBaseUtil;
+    private ArrayList<String> lockList = MyApplication.getLockList();
+    private String status;
     private Context context;
-    public final DataBaseHelper helper = new DataBaseHelper(this,dataBaseName,null,1,null);
-    private SettingListViewAdapter adapter;
+    //public final DataBaseHelper helper = new DataBaseHelper(this,dataBaseName,null,1,null);
+    //private SettingListViewAdapter adapter;
 
     @Override
     protected void initVariables() {
         layoutInflater = LayoutInflater.from(this);
-
         context = this;
 
-        Intent intent = this.getIntent();
-        String status = intent.getStringExtra("status");
 
-        isOpen = (CheckBox)findViewById(R.id.checkBox);
-        if (status.equals("true")){
-            isOpen.setChecked(true);
-        }
-        else {
-            isOpen.setChecked(false);
-        }
     }
 
     @Override
@@ -55,7 +51,38 @@ public class SettingActivity extends BaseActivity{
         email = (TextView)findViewById(R.id.email);
         pwd = (TextView)findViewById(R.id.pwd);
         about = (TextView)findViewById(R.id.about);
+        isOpen = (CheckBox)findViewById(R.id.checkBox);
 
+        dataBaseUtil = new DataBaseUtil(MyApplication.getInstance());
+        status = dataBaseUtil.getStatus();
+        if (status.equals("true")){
+            isOpen.setChecked(true);
+        }
+        else {
+            isOpen.setChecked(false);
+        }
+        isOpen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    dataBaseUtil.setStatus("true");
+                    Intent intent = new Intent("android.intent.action.SET_BROADCAST");
+                    //Intent intent = new Intent("android.intent.action.MAIN_BROADCAST");
+                    intent.putStringArrayListExtra("lockList", lockList);
+                    intent.putExtra("status", "false");
+                    sendBroadcast(intent);
+                }
+                else {
+                    dataBaseUtil.setStatus("false");
+                    Intent intent = new Intent("android.intent.action.SET_BROADCAST");
+                    //Intent intent = new Intent("android.intent.action.MAIN_BROADCAST");
+                    intent.putStringArrayListExtra("lockList", lockList);
+                    intent.putExtra("status", "false");
+                    sendBroadcast(intent);
+                }
+
+            }
+        });
         email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,6 +123,8 @@ public class SettingActivity extends BaseActivity{
 
     @Override
     protected void loadData() {
+        Intent intent = this.getIntent();
+
 
     }
 }

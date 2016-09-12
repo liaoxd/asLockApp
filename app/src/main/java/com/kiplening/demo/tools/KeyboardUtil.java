@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.kiplening.demo.R;
+import com.kiplening.demo.common.MyApplication;
 
 
 /**
@@ -24,14 +25,14 @@ public class KeyboardUtil {
 
 
     private String password ;
-    final DataBaseUtil dataBaseUtil;
+    private DataBaseUtil dataBaseUtil;
 
     public KeyboardUtil(Activity act, Context ctx, EditText editText) {
         this.act = act;
         this.ctx = ctx;
         this.ed = editText;
-        DataBaseHelper helper = new DataBaseHelper(act,"kiplening",null,1,null);
-        dataBaseUtil = new DataBaseUtil(ctx);
+        //DataBaseHelper helper = new DataBaseHelper(act,"kiplening",null,1,null);
+        dataBaseUtil = new DataBaseUtil(MyApplication.getInstance());
 
         try {
             k = new Keyboard(ctx, R.xml.symbol);

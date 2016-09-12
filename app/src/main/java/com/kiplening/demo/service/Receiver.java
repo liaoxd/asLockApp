@@ -11,13 +11,13 @@ import java.util.ArrayList;
  */
 public class Receiver extends BroadcastReceiver {
     static private Context mainContext ;
-
+    private ArrayList<String> lockList;
     @Override
     public void onReceive(Context context, Intent intent) {
         if (mainContext == null){
             this.mainContext = context;
         }
-        ArrayList<String> lockList = intent.getStringArrayListExtra("lockList");
+        lockList = intent.getStringArrayListExtra("lockList");
         if (intent.getAction().equals("android.intent.action.SET_BROADCAST")){
             System.out.println("checkbox broadcast is working.");
             if(intent.getStringExtra("status").equals("true")){
@@ -36,6 +36,7 @@ public class Receiver extends BroadcastReceiver {
             return;
         }
         if (intent.getAction().equals("android.intent.action.MAIN_BROADCAST")){
+
             //this.lockList = intent.getStringArrayListExtra("lockList");
             if (intent.getStringExtra("status").equals("false")){
                 Intent servIntent = new Intent(context, LockService.class);

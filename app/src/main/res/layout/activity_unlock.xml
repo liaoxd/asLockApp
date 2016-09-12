@@ -3,17 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="0dp"
-    android:paddingRight="0dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
     android:paddingTop="10dp"
     android:paddingBottom="0dp"
     tools:context=".UnLockActivity"
     android:orientation="vertical">
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
     <EditText
         android:id="@+id/edit"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:hint="input password"
         android:password="true"
         android:inputType="number"/>
 

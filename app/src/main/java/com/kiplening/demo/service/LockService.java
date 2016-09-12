@@ -18,9 +18,13 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.kiplening.demo.activity.UnLockActivity;
+import com.kiplening.demo.common.MyApplication;
+import com.kiplening.demo.tools.DataBaseUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
 
 /**
  * Created by MOON on 1/19/2016.
@@ -31,9 +35,10 @@ public class LockService extends Service{
     private Handler mHandler = null;
     private final static int LOOPHANDLER = 0;
     private HandlerThread handlerThread = null;
+    private DataBaseUtil dataBaseUtil;
 
     private ArrayList<String> lockName = new ArrayList<>();
-    private boolean isUnLockActivity = false;
+    private HashMap<String,Boolean> booleanState = MyApplication.getBooleanState();
     private String status;
 
     //设定检测时间的间隔，间隔太长可能造成已进入软件还未加锁的情况，
@@ -50,7 +55,9 @@ public class LockService extends Service{
         handlerThread = new HandlerThread("count_thread");
         handlerThread.start();
         lockName = intent.getStringArrayListExtra("lockList");
-        status = intent.getStringExtra("status");
+        dataBaseUtil = new DataBaseUtil(MyApplication.getInstance());
+        status = dataBaseUtil.getStatus();
+        //status = intent.getStringExtra("status");
         for (String l:lockName) {
             System.out.print("锁定");
             System.out.println(l);
@@ -74,7 +81,7 @@ public class LockService extends Service{
                              * 所以这里用isUnLockActivity变量来做判断的
                             */
                             try {
-                                if(isLockName() && !isUnLockActivity){
+                                if(isLockName() && !booleanState.get("isInputPWD")){
                                     if (status.equals("true")){
                                         Log.i(TAG, "locking...");
                                         //调用了解锁界面之后，需要设置一下isUnLockActivity的值
@@ -82,9 +89,10 @@ public class LockService extends Service{
                                         Intent intent = new Intent(LockService.this,UnLockActivity.class);
 
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        //intent.putExtra("isUnLockActivity",false);
                                         startActivity(intent);
 
-                                        isUnLockActivity = true;
+                                        //isUnLockActivity = true;
                                     }
 
                                 }
@@ -167,11 +175,12 @@ public class LockService extends Service{
         boolean isScreenOn = pm.isScreenOn();//如果为true，则表示屏幕“亮”了，否则屏幕“暗”了。
         //如果当前的Activity是桌面app,那么就需要将isUnLockActivity清空值
         if(getHomes().contains(packageName)){
-            isUnLockActivity = false;
+            System.out.println("get home screen!");
+            booleanState.put("isInputPWD",Boolean.FALSE);
         }
 
         for (int i = 0; i < lockName.size(); i++) {
-            System.out.println(lockName.get(i));
+            //System.out.println(lockName.get(i));
             if(lockName.get(i).equals(packageName)){
                 Log.v("LockService", "Locking ...." + packageName);
                 return true;

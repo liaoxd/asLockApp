@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kiplening.demo.R;
+import com.kiplening.demo.common.MyApplication;
 import com.kiplening.demo.module.App;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class ListViewAdapter extends BaseAdapter{
 
     public ListViewAdapter(Context context,List<Map<String,Object>> listItems) {
         this.context = context;
-        dataBaseUtil = new DataBaseUtil(context);
+        dataBaseUtil = new DataBaseUtil(MyApplication.getInstance());
         helper = new DataBaseHelper(context,dataBaseName,null,1,null);
         db = helper.getWritableDatabase();
         //创建视图容器

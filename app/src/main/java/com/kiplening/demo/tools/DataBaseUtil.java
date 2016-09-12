@@ -23,6 +23,7 @@ public class DataBaseUtil {
     public DataBaseUtil(Context context) {
         DataBaseHelper helper = new DataBaseHelper(context, dataBaseName, null, 1, null);
         db = helper.getWritableDatabase();
+        /*
         Cursor c = db.rawQuery("select * from settings", null);
         if (c != null) {
             if (c.moveToFirst()) {
@@ -30,14 +31,15 @@ public class DataBaseUtil {
                     if (c.getString(c.getColumnIndexOrThrow("id")).equals("host")) {
                         ContentValues cv = new ContentValues();
                         cv.put("id", "host");
-                        cv.put("password", "null");
+                        cv.put("password", "123456");
                         cv.put("status", "true");
                         cv.put("email", "null");
                         db.insert("settings", null, cv);
                     }
                 }
             }
-        }
+
+        }*/
     }
 
     /**
