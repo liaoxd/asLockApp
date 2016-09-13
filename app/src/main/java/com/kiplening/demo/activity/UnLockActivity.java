@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.kiplening.demo.R;
 import com.kiplening.demo.common.MyApplication;
 import com.kiplening.demo.tools.DataBaseUtil;
-import com.kiplening.mylibrary.activity.BaseActivity;
+import com.kiplening.androidlib.activity.BaseActivity;
 
 import java.util.HashMap;
 import java.util.Timer;

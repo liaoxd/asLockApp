@@ -13,7 +13,7 @@ import com.kiplening.demo.R;
 import com.kiplening.demo.common.MyApplication;
 import com.kiplening.demo.tools.DataBaseHelper;
 import com.kiplening.demo.tools.DataBaseUtil;
-import com.kiplening.mylibrary.activity.BaseActivity;
+import com.kiplening.androidlib.activity.BaseActivity;
 
 /**
  * Created by MOON on 1/25/2016.

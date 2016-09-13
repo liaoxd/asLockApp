@@ -5,8 +5,8 @@ android {
     buildToolsVersion "23.0.0"
 
     defaultConfig {
-        applicationId "com.kiplening.demo"
-        minSdkVersion 11
+        applicationId "com.kiplening.asLockApp"
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -22,5 +22,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.0.0'
-    compile project(path: ':mylibrary')
+    compile 'com.jakewharton:butterknife:5.1.1'
+    compile project(path: ':androidlib')
 }

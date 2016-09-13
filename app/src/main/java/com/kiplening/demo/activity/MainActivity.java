@@ -26,23 +26,30 @@ import com.kiplening.demo.common.MyApplication;
 import com.kiplening.demo.module.App;
 import com.kiplening.demo.tools.DataBaseUtil;
 import com.kiplening.demo.tools.ListViewAdapter;
-import com.kiplening.mylibrary.activity.BaseActivity;
+import com.kiplening.androidlib.activity.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class MainActivity extends BaseActivity {
 
     private List<Map<String, Object>> listItems;
-    private ListView myList;
+
     private ListViewAdapter listViewAdapter;
     private ArrayList<String> lockList = MyApplication.getLockList();
     private ArrayList<App> lockedApps;
     private DataBaseUtil dataBaseUtil;
     private String status;
-    private Button setting;
+    //private ListView myList;
+    @InjectView(R.id.list)
+    ListView myList;
+    @InjectView(R.id.settings)
+    Button setting;
 
     @Override
     protected void initVariables() {
@@ -52,7 +59,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initViews(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
-        setting = (Button) findViewById(R.id.settings);
+        ButterKnife.inject(this);
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,7 +173,7 @@ public class MainActivity extends BaseActivity {
                         getPackageManager()).toString());
             }
         }
-        myList = (ListView) findViewById(R.id.list);
+        //myList = (ListView) findViewById(R.id.list);
         listViewAdapter = new ListViewAdapter(this, listItems);
         myList.setAdapter(listViewAdapter);
 

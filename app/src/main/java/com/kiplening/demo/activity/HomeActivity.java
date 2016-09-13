@@ -15,19 +15,23 @@ import com.kiplening.demo.R;
 import com.kiplening.demo.common.MyApplication;
 import com.kiplening.demo.tools.DataBaseHelper;
 import com.kiplening.demo.tools.DataBaseUtil;
-import com.kiplening.mylibrary.activity.BaseActivity;
+import com.kiplening.androidlib.activity.BaseActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * Created by MOON on 4/17/2016.
  */
 public class HomeActivity extends BaseActivity {
-    private EditText edit;
+
     private Context ctx;
     private Activity act;
     private String password ;
+    @InjectView(R.id.edit) EditText edit;
 
     @Override
     protected void initVariables() {
@@ -38,8 +42,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void initViews(Bundle savedInstanceState) {
         setContentView(R.layout.activity_unlock);
-
-        edit = (EditText)this.findViewById(R.id.edit);
+        ButterKnife.inject(this);
         edit.setFocusable(true);
         edit.setFocusableInTouchMode(true);
         edit.requestFocus();
