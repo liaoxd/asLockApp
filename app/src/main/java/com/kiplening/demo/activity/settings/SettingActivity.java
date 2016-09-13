@@ -19,19 +19,27 @@ import com.kiplening.mylibrary.activity.BaseActivity;
 
 import java.util.ArrayList;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by MOON on 1/22/2016.
  */
 public class SettingActivity extends BaseActivity{
     private String dataBaseName = "kiplening";
 
-    private CheckBox isOpen;
-    private TextView email,pwd,about;
+    @InjectView(R.id.checkBox) CheckBox isOpen;
+    @InjectView(R.id.email) TextView email;
+    @InjectView(R.id.pwd) TextView pwd;
+    @InjectView(R.id.about) TextView about;
+    //@InjectView(R.layout.setting_email) View inputEmail;
     private LayoutInflater layoutInflater;
     private DataBaseUtil dataBaseUtil;
     private ArrayList<String> lockList = MyApplication.getLockList();
     private String status;
     private Context context;
+
+
     //public final DataBaseHelper helper = new DataBaseHelper(this,dataBaseName,null,1,null);
     //private SettingListViewAdapter adapter;
 
@@ -40,18 +48,14 @@ public class SettingActivity extends BaseActivity{
         layoutInflater = LayoutInflater.from(this);
         context = this;
 
-
     }
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
         setContentView(R.layout.activity_setting);
-        final View inputEmail = layoutInflater.inflate(R.layout.setting_email, null);
+        ButterKnife.inject(this);
+        //final View inputEmail = layoutInflater.inflate(R.layout.setting_email, null);
 
-        email = (TextView)findViewById(R.id.email);
-        pwd = (TextView)findViewById(R.id.pwd);
-        about = (TextView)findViewById(R.id.about);
-        isOpen = (CheckBox)findViewById(R.id.checkBox);
 
         dataBaseUtil = new DataBaseUtil(MyApplication.getInstance());
         status = dataBaseUtil.getStatus();
@@ -86,23 +90,25 @@ public class SettingActivity extends BaseActivity{
         email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                new AlertDialog.Builder(context).
+                        new AlertDialog.Builder(context).
                         setTitle("绑定邮箱").
                         setMessage("用于找回密码")
-                        .setView(inputEmail)
+                        .setView(layoutInflater.inflate(R.layout.setting_email, null))
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+
+                                //finish();
                             }
                         })
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //TODO 添加保存邮箱的操作
-                                finish();
+                                //finish();
                             }
                         }).show();
+
             }
         });
         pwd.setOnClickListener(new View.OnClickListener() {
