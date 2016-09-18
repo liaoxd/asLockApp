@@ -13,10 +13,10 @@
         android:name=".common.MyApplication"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.Main.MainActivity"
             android:launchMode="singleInstance"
             android:label="@string/app_name" />
-        <activity android:name=".activity.HomeActivity"
+        <activity android:name=".activity.Home.HomeActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

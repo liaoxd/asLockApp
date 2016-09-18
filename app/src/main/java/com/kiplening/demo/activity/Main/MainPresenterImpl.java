@@ -17,7 +17,7 @@ public class MainPresenterImpl implements MainPresenter,MainInteracter.onLoginLi
     private MainView mainView;
     private MainInteracter mainInteracter;
     private ArrayList<App> appList = new ArrayList<>();
-    String status = mainInteracter.getStatus();
+    String status ;
 
     public MainPresenterImpl(MainView mainView) {
         this.mainView = mainView;
@@ -26,25 +26,20 @@ public class MainPresenterImpl implements MainPresenter,MainInteracter.onLoginLi
 
     @Override
     public void checkPromission() {
+        status = mainInteracter.getStatus();
         int currentVersion = android.os.Build.VERSION.SDK_INT;
-        while (currentVersion > 20) {
+        if (currentVersion > 20) {
             if (!isNoSwitch()) {
                 mainView.RequestPromission();
 
             } else {
                 mainInteracter.getAll(appList);
-
                 mainView.showList(appList,status);
-                break;
+
             }
         }
         mainInteracter.getAll(appList);
         mainView.showList(appList,status);
-
-    }
-
-    @Override
-    public void verifyPWD() {
 
     }
 

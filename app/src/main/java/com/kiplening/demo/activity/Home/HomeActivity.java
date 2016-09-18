@@ -1,4 +1,4 @@
-package com.kiplening.demo.activity;
+package com.kiplening.demo.activity.Home;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,13 +9,13 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
+import com.kiplening.androidlib.activity.BaseActivity;
 import com.kiplening.demo.R;
+import com.kiplening.demo.activity.Main.MainActivity;
 import com.kiplening.demo.common.MyApplication;
 import com.kiplening.demo.tools.DataBaseHelper;
 import com.kiplening.demo.tools.DataBaseUtil;
-import com.kiplening.androidlib.activity.BaseActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,17 +26,18 @@ import butterknife.InjectView;
 /**
  * Created by MOON on 4/17/2016.
  */
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements HomeView {
 
-    private Context ctx;
     private Activity act;
+    private HomePresenter presenter;
     private String password ;
     @InjectView(R.id.edit) EditText edit;
 
     @Override
     protected void initVariables() {
-        ctx = this;
         act = this;
+
+        presenter = new HomePresenterImpl(this);
     }
 
     @Override
@@ -60,24 +61,13 @@ public class HomeActivity extends BaseActivity {
         edit.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                Editable editable = edit.getText();
                 int start = edit.getSelectionStart();
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
                     //除了判断当前按键的 keyCode 以外，判定当前的动作。
                     //不然这个方法在 ACTION_DOWN 和ACTION_UP的时候都会被调用
                     //这样会导致多增加一个空的任务。需要多加注意。
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                        if (edit.getText().toString().equals(password)){
-                            //act.finish();
-                            Intent intent = new Intent(HomeActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            act.finish();
-                        }
-                        else {
-                            editable.delete(0, start);
-                            Toast.makeText(act, "密码错误，请重输" + password, Toast.LENGTH_SHORT).show();
-                        }
-
+                        presenter.verifyPWD(edit.getText().toString());
                     }
                     return true;
                 }
@@ -104,5 +94,20 @@ public class HomeActivity extends BaseActivity {
             return true;//阻止事件继续向下分发
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+
+    @Override
+    public void navigationToMain() {
+        Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void setPWDError() {
+        Editable editable = edit.getText();
+        int start = edit.getSelectionStart();
+        editable.delete(0, start);
     }
 }

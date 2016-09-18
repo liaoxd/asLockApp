@@ -21,7 +21,6 @@ import com.kiplening.demo.R;
 import com.kiplening.demo.activity.settings.SettingActivity;
 import com.kiplening.demo.common.MyApplication;
 import com.kiplening.demo.module.App;
-import com.kiplening.demo.tools.DataBaseUtil;
 import com.kiplening.demo.tools.ListViewAdapter;
 
 import java.util.ArrayList;
@@ -38,9 +37,7 @@ public class MainActivity extends BaseActivity implements MainView {
 
     private ListViewAdapter listViewAdapter;
     private ArrayList<String> lockList = MyApplication.getLockList();
-    private ArrayList<App> lockedApps;
-    private DataBaseUtil dataBaseUtil;
-    private String status;
+
     //private ListView myList;
     @InjectView(R.id.list)
     ListView myList;
@@ -68,11 +65,7 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     protected void loadData() {
-        dataBaseUtil = new DataBaseUtil(MyApplication.getInstance());
-        String password = dataBaseUtil.getPWD();
-        if (password.equals("null")){
 
-        }
     }
 
     public boolean isSystemApp(PackageInfo pInfo) {
@@ -130,8 +123,7 @@ public class MainActivity extends BaseActivity implements MainView {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent i = new Intent(MainActivity.this, SettingActivity.class);
-            status = dataBaseUtil.getStatus();
-            i.putExtra("status", status);
+
             startActivity(i);
             return true;
         }
@@ -154,10 +146,8 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     @Override
-    public void showList() {
-        dataBaseUtil = new DataBaseUtil(MyApplication.getInstance());
-        lockedApps = dataBaseUtil.getAll();
-        status = dataBaseUtil.getStatus();
+    public void showList(ArrayList<App> lockedApps, String status) {
+
         if (status.equals("error")) {
             ContentValues cv = new ContentValues();
             cv.put("status", "true");
