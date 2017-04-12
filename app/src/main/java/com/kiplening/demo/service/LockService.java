@@ -109,9 +109,7 @@ public class LockService extends Service{
 
             return Service.START_STICKY;
         }
-
     }
-
     private boolean isLockName() throws PackageManager.NameNotFoundException {
         // TODO Auto-generated method stub
         List<PackageInfo> packages = getPackageManager()
