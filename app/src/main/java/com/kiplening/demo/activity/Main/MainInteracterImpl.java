@@ -31,7 +31,8 @@ public class MainInteracterImpl implements MainInteracter {
     }
 
     @Override
-    public void getAll(ArrayList<App> list) {
+    public ArrayList<App> getAll(ArrayList<App> list) {
         list = dataBaseUtil.getAll();
+        return list;
     }
 }

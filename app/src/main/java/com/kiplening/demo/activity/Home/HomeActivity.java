@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.kiplening.androidlib.activity.BaseActivity;
 import com.kiplening.demo.R;
@@ -17,6 +18,7 @@ import com.kiplening.demo.common.MyApplication;
 import com.kiplening.demo.tools.DataBaseHelper;
 import com.kiplening.demo.tools.DataBaseUtil;
 
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -48,6 +50,8 @@ public class HomeActivity extends BaseActivity implements HomeView {
         edit.setFocusableInTouchMode(true);
         edit.requestFocus();
 
+        Toast.makeText(this,String.format(Locale.US,"http://%s/status","localhost:8081"),Toast.LENGTH_LONG);
+        //Log.e(TAG, "initViews:"+String.format(Locale.US,"http://%s/status","localhost:8081"),null);
         Timer timer = new Timer(); //设置定时器
         timer.schedule(new TimerTask() {
             @Override

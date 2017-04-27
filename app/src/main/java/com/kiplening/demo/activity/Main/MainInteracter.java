@@ -17,5 +17,5 @@ public interface MainInteracter {
 
     String getStatus();
 
-    void getAll(ArrayList<App> list);
+    ArrayList getAll(ArrayList<App> list);
 }

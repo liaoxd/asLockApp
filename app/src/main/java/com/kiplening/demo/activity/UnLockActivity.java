@@ -3,6 +3,7 @@ package com.kiplening.demo.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.View;
@@ -69,6 +70,8 @@ public class UnLockActivity extends BaseActivity{
 
                             booleanState.put("isInputPWD",Boolean.TRUE);
                             //System.out.println(MyApplication.getIsInputPED()+" "+isInputPWD);
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow((IBinder) edit,InputMethodManager.RESULT_HIDDEN);
                             act.finish();
                         }
                         else {

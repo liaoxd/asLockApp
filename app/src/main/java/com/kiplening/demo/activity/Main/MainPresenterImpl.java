@@ -3,6 +3,7 @@ package com.kiplening.demo.activity.Main;
 import android.annotation.TargetApi;
 import android.app.usage.UsageStatsManager;
 import android.os.Build;
+import android.util.Log;
 
 import com.kiplening.demo.common.MyApplication;
 import com.kiplening.demo.module.App;
@@ -27,13 +28,15 @@ public class MainPresenterImpl implements MainPresenter,MainInteracter.onLoginLi
     @Override
     public void checkPromission() {
         status = mainInteracter.getStatus();
+        mainInteracter.getAll(appList);
+        Log.d("test"," "+ appList.size());
         int currentVersion = android.os.Build.VERSION.SDK_INT;
         if (currentVersion > 20) {
             if (!isNoSwitch()) {
                 mainView.RequestPromission();
 
             } else {
-                mainInteracter.getAll(appList);
+                appList = mainInteracter.getAll(appList);
                 mainView.showList(appList,status);
 
             }

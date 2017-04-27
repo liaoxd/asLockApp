@@ -15,9 +15,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.kiplening.androidlib.activity.BaseActivity;
 import com.kiplening.demo.R;
+import com.kiplening.demo.activity.MyReactActivity;
 import com.kiplening.demo.activity.settings.SettingActivity;
 import com.kiplening.demo.common.MyApplication;
 import com.kiplening.demo.module.App;
@@ -26,6 +28,7 @@ import com.kiplening.demo.tools.ListViewAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.ButterKnife;
@@ -61,6 +64,7 @@ public class MainActivity extends BaseActivity implements MainView {
                 navigationToSetting();
             }
         });
+        Toast.makeText(this,String.format(Locale.US,"http://%s/status","localhost:8081"),Toast.LENGTH_SHORT);
     }
 
     @Override
@@ -134,7 +138,8 @@ public class MainActivity extends BaseActivity implements MainView {
     public void RequestPromission() {
         new AlertDialog.Builder(this).
                 setTitle("设置").
-                setMessage("开启usagestats权限")
+                //setMessage("开启usagestats权限")
+                setMessage(String.format(Locale.US,"http://%s/status","localhost:8081"))
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -148,6 +153,9 @@ public class MainActivity extends BaseActivity implements MainView {
     @Override
     public void showList(ArrayList<App> lockedApps, String status) {
 
+        Toast.makeText(this,
+                String.format(Locale.US,"http://%s/status","localhost:8081") + "---hello",
+                Toast.LENGTH_SHORT);
         if (status.equals("error")) {
             ContentValues cv = new ContentValues();
             cv.put("status", "true");
@@ -205,9 +213,11 @@ public class MainActivity extends BaseActivity implements MainView {
         super.onDestroy();
     }
 
+    //Activity 跳转
     @Override
     public void navigationToSetting() {
-        Intent intent = new Intent(this,SettingActivity.class);
+
+        Intent intent = new Intent(this,MyReactActivity.class);
         startActivity(intent);
     }
 }
