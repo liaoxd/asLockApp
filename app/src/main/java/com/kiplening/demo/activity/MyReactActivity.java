@@ -6,6 +6,8 @@ import android.view.KeyEvent;
 
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
+import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.common.LifecycleState;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.shell.MainReactPackage;
@@ -85,5 +87,17 @@ public class MyReactActivity extends Activity implements
             return true;
         }
         return super.onKeyUp(keyCode, event);
+    }
+
+    @ReactMethod
+    public void  callBackTime(String name,Callback callback){
+        callback.invoke(getTime());
+    }
+
+    @ReactMethod
+    public long getTime() {
+        long date = System.currentTimeMillis();
+
+        return date;
     }
 }

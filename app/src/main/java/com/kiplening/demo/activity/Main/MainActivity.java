@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.kiplening.androidlib.activity.BaseActivity;
 import com.kiplening.demo.R;
-import com.kiplening.demo.activity.MyReactActivity;
 import com.kiplening.demo.activity.settings.SettingActivity;
 import com.kiplening.demo.common.MyApplication;
 import com.kiplening.demo.module.App;
@@ -217,7 +216,7 @@ public class MainActivity extends BaseActivity implements MainView {
     @Override
     public void navigationToSetting() {
 
-        Intent intent = new Intent(this,MyReactActivity.class);
+        Intent intent = new Intent(this,SettingActivity.class);
         startActivity(intent);
     }
 }

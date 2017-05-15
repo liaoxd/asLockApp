@@ -6,7 +6,11 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  View
+  View,
+  TouchableHighlight,
+  DeviceEventEmitter,
+  NativeModules,
+  ToastAndroid
 } from 'react-native';
 
 class HelloWorld extends React.Component {
@@ -17,6 +21,25 @@ class HelloWorld extends React.Component {
             newPWD: ''
         };
     }
+    _onPressButton() {
+        console.log("You tapped the button!");
+      }
+    /**
+     *
+    */
+    componentDidMout(){
+        DeviceEventEmitter.addListener('nativeCallRN',(msg) =>{
+            title = "React Native界面，接收到数据："+global.patchImgNames;
+            ToastAndroid.show("发送成功",ToastAndroid.SHORT);
+        })
+    }
+    /**
+        * 调用原生代码
+        */
+        skipNativeCall() {
+           let phone = '18380429225';
+           NativeModules.TransMissionModule.rnCallNative(phone);
+        }
   render() {
     return (
       <View style={{padding: 10}}>
@@ -30,6 +53,9 @@ class HelloWorld extends React.Component {
                  placeholder="Type new password!"
                  onChangeText={(newPWD) => this.setState({newPWD})}
               />
+              <TouchableHighlight onPress={this.skipNativeCall.bind(this)}>
+                      <Text>确定</Text>
+              </TouchableHighlight>
       </View>
     );
   }

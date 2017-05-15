@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kiplening.demo.R;
+import com.kiplening.demo.activity.MyReactActivity;
 import com.kiplening.demo.common.MyApplication;
 import com.kiplening.demo.tools.DataBaseUtil;
 import com.kiplening.androidlib.activity.BaseActivity;
@@ -115,7 +116,7 @@ public class SettingActivity extends BaseActivity{
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(SettingActivity.this,SetPwdActivity.class);
+                Intent intent = new Intent(SettingActivity.this,MyReactActivity.class);
                 startActivity(intent);
             }
         });
