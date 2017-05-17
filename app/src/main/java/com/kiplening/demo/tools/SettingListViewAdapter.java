@@ -10,8 +10,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.kiplening.demo.MainApplication;
 import com.kiplening.demo.R;
-import com.kiplening.demo.common.MyApplication;
 
 import java.util.ArrayList;
 
@@ -30,7 +30,7 @@ public class SettingListViewAdapter extends BaseAdapter {
     public SettingListViewAdapter(Context context,String status) {
         this.context = context;
         this.status = status;
-        dataBaseUtil = new DataBaseUtil(MyApplication.getInstance());
+        dataBaseUtil = new DataBaseUtil(MainApplication.getInstance());
 
         listContainer = LayoutInflater.from(context);
     }

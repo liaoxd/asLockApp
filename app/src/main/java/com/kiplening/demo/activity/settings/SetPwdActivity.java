@@ -9,8 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.kiplening.demo.MainApplication;
 import com.kiplening.demo.R;
-import com.kiplening.demo.common.MyApplication;
 import com.kiplening.demo.tools.DataBaseHelper;
 import com.kiplening.demo.tools.DataBaseUtil;
 import com.kiplening.androidlib.activity.BaseActivity;
@@ -32,7 +32,7 @@ public class SetPwdActivity extends BaseActivity {
     @Override
     protected void initVariables() {
         context = this;
-        dataBaseUtil = new DataBaseUtil(MyApplication.getInstance());
+        dataBaseUtil = new DataBaseUtil(MainApplication.getInstance());
     }
 
     @Override

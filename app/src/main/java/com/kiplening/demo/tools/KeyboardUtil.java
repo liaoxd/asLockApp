@@ -9,8 +9,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.kiplening.demo.MainApplication;
 import com.kiplening.demo.R;
-import com.kiplening.demo.common.MyApplication;
 
 
 /**
@@ -32,7 +32,7 @@ public class KeyboardUtil {
         this.ctx = ctx;
         this.ed = editText;
         //DataBaseHelper helper = new DataBaseHelper(act,"kiplening",null,1,null);
-        dataBaseUtil = new DataBaseUtil(MyApplication.getInstance());
+        dataBaseUtil = new DataBaseUtil(MainApplication.getInstance());
 
         try {
             k = new Keyboard(ctx, R.xml.symbol);

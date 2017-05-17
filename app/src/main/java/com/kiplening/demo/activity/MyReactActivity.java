@@ -12,6 +12,7 @@ import com.facebook.react.common.LifecycleState;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.shell.MainReactPackage;
 import com.kiplening.demo.BuildConfig;
+import com.kiplening.demo.reactNativeTrans.TransMissionPackage;
 
 /**
  * Created by MOON on 4/26/2017.
@@ -32,6 +33,7 @@ public class MyReactActivity extends Activity implements
                 .setBundleAssetName("index.android.bundle")
                 .setJSMainModuleName("index.android")
                 .addPackage(new MainReactPackage())
+                .addPackage(new TransMissionPackage())
                 .setUseDeveloperSupport(BuildConfig.DEBUG)
                 .setInitialLifecycleState(LifecycleState.RESUMED)
                 .build();

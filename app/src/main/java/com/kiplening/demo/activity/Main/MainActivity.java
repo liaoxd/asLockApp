@@ -20,7 +20,7 @@ import android.widget.Toast;
 import com.kiplening.androidlib.activity.BaseActivity;
 import com.kiplening.demo.R;
 import com.kiplening.demo.activity.settings.SettingActivity;
-import com.kiplening.demo.common.MyApplication;
+import com.kiplening.demo.MainApplication;
 import com.kiplening.demo.module.App;
 import com.kiplening.demo.tools.ListViewAdapter;
 
@@ -38,7 +38,7 @@ public class MainActivity extends BaseActivity implements MainView {
     private List<Map<String, Object>> listItems;
 
     private ListViewAdapter listViewAdapter;
-    private ArrayList<String> lockList = MyApplication.getLockList();
+    private ArrayList<String> lockList = MainApplication.getLockList();
 
     //private ListView myList;
     @InjectView(R.id.list)

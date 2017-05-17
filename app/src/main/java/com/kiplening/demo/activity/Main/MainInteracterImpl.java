@@ -2,7 +2,7 @@ package com.kiplening.demo.activity.Main;
 
 import android.content.Context;
 
-import com.kiplening.demo.common.MyApplication;
+import com.kiplening.demo.MainApplication;
 import com.kiplening.demo.module.App;
 import com.kiplening.demo.tools.DataBaseUtil;
 
@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * Created by MOON on 9/15/2016.
  */
 public class MainInteracterImpl implements MainInteracter {
-    private Context context = MyApplication.getInstance();
+    private Context context = MainApplication.getInstance();
     private DataBaseUtil dataBaseUtil = new DataBaseUtil(context);
     @Override
     public void login(String PWD, onLoginListener listener) {

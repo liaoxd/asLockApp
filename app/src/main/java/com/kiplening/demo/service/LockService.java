@@ -18,7 +18,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.kiplening.demo.activity.UnLockActivity;
-import com.kiplening.demo.common.MyApplication;
+import com.kiplening.demo.MainApplication;
 import com.kiplening.demo.tools.DataBaseUtil;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class LockService extends Service{
     private DataBaseUtil dataBaseUtil;
 
     private ArrayList<String> lockName = new ArrayList<>();
-    private HashMap<String,Boolean> booleanState = MyApplication.getBooleanState();
+    private HashMap<String,Boolean> booleanState = MainApplication.getBooleanState();
     private String status;
 
     //设定检测时间的间隔，间隔太长可能造成已进入软件还未加锁的情况，
@@ -55,7 +55,7 @@ public class LockService extends Service{
         handlerThread = new HandlerThread("count_thread");
         handlerThread.start();
         lockName = intent.getStringArrayListExtra("lockList");
-        dataBaseUtil = new DataBaseUtil(MyApplication.getInstance());
+        dataBaseUtil = new DataBaseUtil(MainApplication.getInstance());
         status = dataBaseUtil.getStatus();
         //status = intent.getStringExtra("status");
         for (String l:lockName) {

@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 public class TransMissionPackage implements ReactPackage {
-    private TransMissionModule mModule;
+    public TransMissionModule mModule;
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {

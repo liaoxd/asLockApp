@@ -12,9 +12,9 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kiplening.demo.MainApplication;
 import com.kiplening.demo.R;
 import com.kiplening.demo.activity.MyReactActivity;
-import com.kiplening.demo.common.MyApplication;
 import com.kiplening.demo.tools.DataBaseUtil;
 import com.kiplening.androidlib.activity.BaseActivity;
 
@@ -36,7 +36,7 @@ public class SettingActivity extends BaseActivity{
     //@InjectView(R.layout.setting_email) View inputEmail;
     private LayoutInflater layoutInflater;
     private DataBaseUtil dataBaseUtil;
-    private ArrayList<String> lockList = MyApplication.getLockList();
+    private ArrayList<String> lockList = MainApplication.getLockList();
     private String status;
     private Context context;
 
@@ -58,7 +58,7 @@ public class SettingActivity extends BaseActivity{
         //final View inputEmail = layoutInflater.inflate(R.layout.setting_email, null);
 
 
-        dataBaseUtil = new DataBaseUtil(MyApplication.getInstance());
+        dataBaseUtil = new DataBaseUtil(MainApplication.getInstance());
         status = dataBaseUtil.getStatus();
         if (status.equals("true")){
             isOpen.setChecked(true);

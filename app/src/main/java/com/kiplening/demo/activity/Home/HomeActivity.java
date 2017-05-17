@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.kiplening.androidlib.activity.BaseActivity;
 import com.kiplening.demo.R;
 import com.kiplening.demo.activity.Main.MainActivity;
-import com.kiplening.demo.common.MyApplication;
+import com.kiplening.demo.MainApplication;
 import com.kiplening.demo.tools.DataBaseHelper;
 import com.kiplening.demo.tools.DataBaseUtil;
 
@@ -85,7 +85,7 @@ public class HomeActivity extends BaseActivity implements HomeView {
     protected void loadData() {
         final DataBaseUtil dataBaseUtil;
         DataBaseHelper helper = new DataBaseHelper(act,"kiplening",null,1,null);
-        dataBaseUtil = new DataBaseUtil(MyApplication.getInstance());
+        dataBaseUtil = new DataBaseUtil(MainApplication.getInstance());
         password = dataBaseUtil.getPWD();
     }
 

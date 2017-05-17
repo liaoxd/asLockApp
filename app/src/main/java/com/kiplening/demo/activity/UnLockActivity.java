@@ -11,8 +11,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.kiplening.demo.MainApplication;
 import com.kiplening.demo.R;
-import com.kiplening.demo.common.MyApplication;
 import com.kiplening.demo.tools.DataBaseUtil;
 import com.kiplening.androidlib.activity.BaseActivity;
 
@@ -28,7 +28,7 @@ public class UnLockActivity extends BaseActivity{
     private Context ctx;
     private Activity act;
     private DataBaseUtil dataBaseUtil;
-    private HashMap<String,Boolean> booleanState = MyApplication.getBooleanState();
+    private HashMap<String,Boolean> booleanState = MainApplication.getBooleanState();
 
     @Override
     protected void initVariables() {
@@ -54,7 +54,7 @@ public class UnLockActivity extends BaseActivity{
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
             }
         }, 100); //设置300毫秒的时长
-        dataBaseUtil = new DataBaseUtil(MyApplication.getInstance());
+        dataBaseUtil = new DataBaseUtil(MainApplication.getInstance());
         edit.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -69,7 +69,7 @@ public class UnLockActivity extends BaseActivity{
                             //act.finish();
 
                             booleanState.put("isInputPWD",Boolean.TRUE);
-                            //System.out.println(MyApplication.getIsInputPED()+" "+isInputPWD);
+                            //System.out.println(MainApplication.getIsInputPED()+" "+isInputPWD);
                             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow((IBinder) edit,InputMethodManager.RESULT_HIDDEN);
                             act.finish();

@@ -5,7 +5,7 @@ import android.app.usage.UsageStatsManager;
 import android.os.Build;
 import android.util.Log;
 
-import com.kiplening.demo.common.MyApplication;
+import com.kiplening.demo.MainApplication;
 import com.kiplening.demo.module.App;
 
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class MainPresenterImpl implements MainPresenter,MainInteracter.onLoginLi
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private boolean isNoSwitch() {
         long ts = System.currentTimeMillis();
-        UsageStatsManager usageStatsManager = (UsageStatsManager) MyApplication.getInstance()
+        UsageStatsManager usageStatsManager = (UsageStatsManager) MainApplication.getInstance()
                 .getSystemService("usagestats");
         List queryUsageStats = usageStatsManager.queryUsageStats(
                 UsageStatsManager.INTERVAL_BEST, 0, ts);

@@ -1,4 +1,4 @@
-package com.kiplening.demo.common;
+package com.kiplening.demo;
 
 import android.app.Application;
 
@@ -7,7 +7,6 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.kiplening.demo.BuildConfig;
 import com.kiplening.demo.module.Settings;
 import com.kiplening.demo.reactNativeTrans.TransMissionPackage;
 
@@ -19,10 +18,10 @@ import java.util.List;
 /**
  * Created by MOON on 3/2/2016.
  */
-public class MyApplication extends Application implements ReactApplication{
+public class MainApplication extends Application implements ReactApplication{
 
-    public static MyApplication instance;
-    public static MyApplication getInstance(){return instance;}
+    public static MainApplication instance;
+    public static MainApplication getInstance(){return instance;}
 
     private static Settings settings;
     public static Settings getSettings(){return settings;}
@@ -39,7 +38,7 @@ public class MyApplication extends Application implements ReactApplication{
         SoLoader.init(this,false);
     }
 
-    public MyApplication(){
+    public MainApplication(){
         super.onCreate();
         this.instance = this;
         this.lockList = new ArrayList<>();
@@ -87,5 +86,10 @@ public class MyApplication extends Application implements ReactApplication{
         return mTransMissionPackage;
     }
 
+    protected List<ReactPackage> getPackages() {
+        return Arrays.<ReactPackage>asList(
+                new MainReactPackage(),
+                new TransMissionPackage()); // <-- 添加这一行，类名替换成你的Package类的名字.
+    }
 
 }
