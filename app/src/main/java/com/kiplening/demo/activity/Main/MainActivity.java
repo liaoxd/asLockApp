@@ -138,7 +138,7 @@ public class MainActivity extends BaseActivity implements MainView {
         new AlertDialog.Builder(this).
                 setTitle("设置").
                 //setMessage("开启usagestats权限")
-                setMessage(String.format(Locale.US,"http://%s/status","localhost:8081"))
+                setMessage(String.format(Locale.US,"请允许应用锁查看应用的使用情况。"))
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
