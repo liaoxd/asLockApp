@@ -2,13 +2,7 @@ package com.kiplening.demo;
 
 import android.app.Application;
 
-import com.facebook.react.ReactApplication;
-import com.facebook.react.ReactNativeHost;
-import com.facebook.react.ReactPackage;
-import com.facebook.react.shell.MainReactPackage;
-import com.facebook.soloader.SoLoader;
 import com.kiplening.demo.module.Settings;
-import com.kiplening.demo.reactNativeTrans.TransMissionPackage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +12,7 @@ import java.util.List;
 /**
  * Created by MOON on 3/2/2016.
  */
-public class MainApplication extends Application implements ReactApplication{
+public class MainApplication extends Application{
 
     public static MainApplication instance;
     public static MainApplication getInstance(){return instance;}
@@ -35,7 +29,7 @@ public class MainApplication extends Application implements ReactApplication{
     @Override
     public void onCreate() {
         super.onCreate();
-        SoLoader.init(this,false);
+        //SoLoader.init(this,false);
     }
 
     public MainApplication(){
@@ -47,29 +41,29 @@ public class MainApplication extends Application implements ReactApplication{
         //SharedPreferences mSharedPreferences = this.getSharedPreferences("settings",MODE_PRIVATE);
     }
 
-    private static final TransMissionPackage mTransMissionPackage = new TransMissionPackage();
+//    private static final TransMissionPackage mTransMissionPackage = new TransMissionPackage();
+//
+//    private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+//
+//
+//        @Override
+//        public boolean getUseDeveloperSupport() {
+//            return BuildConfig.DEBUG;
+//        }
+//
+//        @Override
+//        protected List<ReactPackage> getPackages() {
+//            return Arrays.<ReactPackage>asList(
+//                    new MainReactPackage(),
+//                    mTransMissionPackage
+//            );
+//        }
+//    };
 
-    private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
-
-
-        @Override
-        public boolean getUseDeveloperSupport() {
-            return BuildConfig.DEBUG;
-        }
-
-        @Override
-        protected List<ReactPackage> getPackages() {
-            return Arrays.<ReactPackage>asList(
-                    new MainReactPackage(),
-                    mTransMissionPackage
-            );
-        }
-    };
-
-    @Override
-    public ReactNativeHost getReactNativeHost() {
-        return mReactNativeHost;
-    }
+//    @Override
+//    public ReactNativeHost getReactNativeHost() {
+//        return mReactNativeHost;
+//    }
 
     /**
      *包名
@@ -82,14 +76,14 @@ public class MainApplication extends Application implements ReactApplication{
      * 获取 reactPackage
      * @return
      */
-    public static TransMissionPackage getReactPackage() {
-        return mTransMissionPackage;
-    }
-
-    protected List<ReactPackage> getPackages() {
-        return Arrays.<ReactPackage>asList(
-                new MainReactPackage(),
-                new TransMissionPackage()); // <-- 添加这一行，类名替换成你的Package类的名字.
-    }
+//    public static TransMissionPackage getReactPackage() {
+//        return mTransMissionPackage;
+//    }
+//
+//    protected List<ReactPackage> getPackages() {
+//        return Arrays.<ReactPackage>asList(
+//                new MainReactPackage(),
+//                new TransMissionPackage()); // <-- 添加这一行，类名替换成你的Package类的名字.
+//    }
 
 }

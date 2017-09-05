@@ -6,16 +6,16 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'com.android.tools.build:gradle:2.3.3'
     }
 }
 
 allprojects {
     repositories {
         jcenter()
-        maven {
-            // All of React Native (JS, Android binaries) is installed from npm
-            url "C:/Users/MOON/Desktop/GitAndroid/asLockApp/node_modules/react-native/android"
-        }
+//        maven {
+//            // All of React Native (JS, Android binaries) is installed from npm
+//            //url "C:/Users/MOON/Desktop/GitAndroid/asLockApp/node_modules/react-native/android"
+//        }
     }
 }
